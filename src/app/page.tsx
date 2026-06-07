@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 
 import { AdBanner } from "@/components/ads/ad-banner";
+import { blogCategoriesById, getPublishedBlogPosts } from "@/lib/blog-data";
 
 const featuredTools = [
   {
@@ -38,27 +39,6 @@ const featuredTools = [
     description: "Search-backed answers for quick technical discovery.",
     score: "Comparison ready",
     accent: "bg-blue-500",
-  },
-];
-
-const editorialPosts = [
-  {
-    title: "Best AI Coding Tools for Developers in 2026",
-    category: "AI Tools",
-    type: "Review",
-    summary: "A practical look at code assistants, editor workflows, and when each tool is worth using.",
-  },
-  {
-    title: "How Freelancers Can Build Faster Client Workflows With AI",
-    category: "Freelancing",
-    type: "Guide",
-    summary: "From brief intake to delivery notes, this guide maps where AI actually saves time.",
-  },
-  {
-    title: "A Practical AI Study System for Tech Learners",
-    category: "Tech Learning",
-    type: "Workflow",
-    summary: "A repeatable system for researching, practicing, summarizing, and building in public.",
   },
 ];
 
@@ -101,6 +81,8 @@ const signals = [
   "Freelance workflows",
   "Tech learning systems",
 ];
+
+const latestBlogPosts = getPublishedBlogPosts().slice(0, 3);
 
 export default function Home() {
   return (
@@ -257,27 +239,31 @@ export default function Home() {
               Reviews, guides, and systems with a developer lens
             </h2>
             <div className="mt-8 grid gap-4">
-              {editorialPosts.map((article) => (
+              {latestBlogPosts.map((article) => {
+                const category = blogCategoriesById[article.categoryId];
+
+                return (
                 <article
-                  key={article.title}
+                  key={article.id}
                   className="card-lift rounded-md border border-border bg-background p-5"
                 >
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="rounded-md bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700">
-                      {article.type}
+                      {category?.name ?? "Article"}
                     </span>
                     <span className="text-xs font-medium text-muted-foreground">
-                      {article.category}
+                      {article.readingTime} min read
                     </span>
                   </div>
                   <h3 className="mt-3 text-xl font-semibold text-foreground">
                     {article.title}
                   </h3>
                   <p className="mt-3 text-sm leading-6 text-muted-foreground">
-                    {article.summary}
+                    {article.excerpt}
                   </p>
                 </article>
-              ))}
+                );
+              })}
             </div>
           </div>
           <aside className="rounded-md border border-border bg-background p-5 shadow-sm">
