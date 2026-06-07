@@ -1,6 +1,6 @@
 type AdBannerProps = {
   label: string;
-  variant?: "top" | "footer";
+  variant?: "top" | "inline" | "footer";
 };
 
 export function AdBanner({ label, variant = "top" }: AdBannerProps) {
@@ -11,8 +11,10 @@ export function AdBanner({ label, variant = "top" }: AdBannerProps) {
     >
       <div
         className={[
-          "flex min-h-20 items-center justify-center rounded-md border border-dashed border-border bg-card/70 text-xs font-medium uppercase text-muted-foreground",
-          variant === "footer" ? "mb-8 mt-10" : "my-4",
+          "flex items-center justify-center rounded-md border border-dashed border-border bg-card/70 text-xs font-medium uppercase text-muted-foreground",
+          variant === "top" ? "my-6 min-h-16" : "",
+          variant === "inline" ? "my-10 min-h-20" : "",
+          variant === "footer" ? "mb-8 mt-10 min-h-16" : "",
         ].join(" ")}
       >
         Advertisement

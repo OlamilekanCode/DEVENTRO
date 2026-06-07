@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 const footerLinks = [
@@ -13,7 +14,13 @@ export function SiteFooter() {
     <footer className="border-t border-border bg-card">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8">
         <div>
-          <p className="text-base font-semibold">DevEntro</p>
+          <Image
+            src="/Logo 1.png"
+            alt="DevEntro"
+            width={174}
+            height={42}
+            className="h-8 w-auto"
+          />
           <p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground">
             AI tools, productivity, and developer workflow insights for builders.
           </p>

@@ -12,7 +12,6 @@ export function SiteShell({ children }: SiteShellProps) {
   return (
     <div className="flex min-h-svh flex-col">
       <SiteHeader />
-      <AdBanner label="Top advertisement" />
       <main className="flex-1">{children}</main>
       <AdBanner label="Footer advertisement" variant="footer" />
       <SiteFooter />
