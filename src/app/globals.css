@@ -121,6 +121,11 @@
   * {
     @apply border-border outline-ring/50;
   }
+  *,
+  ::before,
+  ::after {
+    box-sizing: border-box;
+  }
   html {
     height: 100%;
   }
