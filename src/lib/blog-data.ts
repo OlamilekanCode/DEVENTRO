@@ -167,3 +167,16 @@ export function getPublishedBlogPosts() {
       return new Date(bDate).getTime() - new Date(aDate).getTime();
     });
 }
+
+export function getBlogPostBySlug(slug: string) {
+  return blogPosts.find((post) => post.slug === slug);
+}
+
+export function getRelatedBlogPosts(post: BlogPost, limit = 2) {
+  return getPublishedBlogPosts()
+    .filter(
+      (candidate) =>
+        candidate.id !== post.id && candidate.categoryId === post.categoryId
+    )
+    .slice(0, limit);
+}
