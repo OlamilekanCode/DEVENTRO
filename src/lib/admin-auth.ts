@@ -151,6 +151,26 @@ export const getAdminSessionFromCookie = async (
   }
 };
 
+export const getAdminSessionFromRequest = async (
+  request: Request,
+): Promise<AdminSession | null> => {
+  const cookieHeader = request.headers.get("cookie");
+
+  if (!cookieHeader) {
+    return null;
+  }
+
+  const cookieValue = cookieHeader
+    .split(";")
+    .map((cookie) => cookie.trim())
+    .find((cookie) => cookie.startsWith(`${ADMIN_SESSION_COOKIE}=`))
+    ?.split("=")
+    .slice(1)
+    .join("=");
+
+  return getAdminSessionFromCookie(cookieValue);
+};
+
 export const adminSessionCookieOptions = {
   httpOnly: true,
   maxAge: SESSION_DURATION_SECONDS,

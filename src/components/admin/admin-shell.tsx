@@ -1,6 +1,9 @@
+"use client";
+
 import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   FileText,
   FolderTree,
@@ -26,7 +29,6 @@ const navItems = [
     label: "Dashboard",
     href: "/admin",
     icon: LayoutDashboard,
-    isActive: true,
   },
   {
     label: "Posts",
@@ -66,6 +68,8 @@ const navItems = [
 ];
 
 export function AdminShell({ adminEmail, children }: AdminShellProps) {
+  const pathname = usePathname();
+
   return (
     <div className="min-h-svh bg-[#f7f8fb] text-foreground">
       <aside className="fixed inset-y-0 left-0 z-40 hidden w-72 border-r border-border bg-card px-5 py-6 lg:flex lg:flex-col">
@@ -83,14 +87,18 @@ export function AdminShell({ adminEmail, children }: AdminShellProps) {
         <nav aria-label="Admin navigation" className="mt-10 grid gap-1.5">
           {navItems.map((item) => {
             const Icon = item.icon;
+            const isActive =
+              item.href === "/admin"
+                ? pathname === item.href
+                : pathname.startsWith(item.href);
 
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                aria-current={item.isActive ? "page" : undefined}
+                aria-current={isActive ? "page" : undefined}
                 className={`flex h-11 items-center gap-3 rounded-md px-3 text-sm font-semibold transition-colors ${
-                  item.isActive
+                  isActive
                     ? "bg-foreground text-background shadow-sm"
                     : "text-muted-foreground hover:bg-muted hover:text-foreground"
                 }`}
@@ -174,14 +182,18 @@ export function AdminShell({ adminEmail, children }: AdminShellProps) {
           >
             {navItems.map((item) => {
               const Icon = item.icon;
+              const isActive =
+                item.href === "/admin"
+                  ? pathname === item.href
+                  : pathname.startsWith(item.href);
 
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  aria-current={item.isActive ? "page" : undefined}
+                  aria-current={isActive ? "page" : undefined}
                   className={`inline-flex h-10 shrink-0 items-center gap-2 rounded-md px-3 text-sm font-semibold ${
-                    item.isActive
+                    isActive
                       ? "bg-foreground text-background"
                       : "bg-muted text-muted-foreground"
                   }`}

@@ -27,6 +27,13 @@ npm run db:migrate:remote
 
 Replace the placeholder `database_id` in `wrangler.jsonc` after creating the production D1 database in Cloudflare.
 
+Admin post CRUD uses the local D1 binding during development. Run migrations before opening `/admin/posts`:
+
+```bash
+npm run db:migrate:local
+npm run dev
+```
+
 ## Admin Auth
 
 Phase 9 uses one private admin login controlled by environment variables:
