@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DevEntro
 
-## Getting Started
+DevEntro is a Next.js MVP for AI tool reviews, developer workflow guides, and a future AI tools directory.
 
-First, run the development server:
+## Development
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Database
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Drizzle migrations are generated into `drizzle/`.
 
-## Learn More
+```bash
+npm run db:generate
+npm run db:migrate:local
+```
 
-To learn more about Next.js, take a look at the following resources:
+Remote D1 migrations use:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run db:migrate:remote
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Replace the placeholder `database_id` in `wrangler.jsonc` after creating the production D1 database in Cloudflare.
 
-## Deploy on Vercel
+## Admin Auth
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Phase 9 uses one private admin login controlled by environment variables:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+ADMIN_EMAIL="admin@deventro.site"
+ADMIN_PASSWORD="change-this-password"
+ADMIN_SESSION_SECRET="use-a-long-random-secret"
+```
+
+`ADMIN_SESSION_SECRET` signs the HTTP-only admin session cookie. Use a long random value in production.
