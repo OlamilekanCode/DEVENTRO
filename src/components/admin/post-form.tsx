@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { MarkdownEditor } from "@/components/admin/markdown-editor";
+import { ContentEditorField } from "@/components/admin/content-editor-field";
 import { Button } from "@/components/ui/button";
 import type { AdminPostDetail } from "@/lib/admin-posts";
 
@@ -22,6 +22,8 @@ export function PostForm({
   post,
   submitLabel,
 }: PostFormProps) {
+  const contentFormat = post?.contentFormat ?? "markdown";
+
   return (
     <form action={action} method="post" className="grid gap-6">
       <div className="grid gap-5 lg:grid-cols-[1fr_320px]">
@@ -57,15 +59,11 @@ export function PostForm({
                 className="resize-y rounded-md border border-border bg-background px-3 py-3 text-sm leading-6 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10"
               />
             </label>
-            <div className="grid gap-2">
-              <span className="text-sm font-medium text-foreground">
-                Content
-              </span>
-              <MarkdownEditor
-                name="contentMarkdown"
-                defaultValue={post?.contentMarkdown ?? ""}
-              />
-            </div>
+            <ContentEditorField
+              defaultFormat={contentFormat}
+              defaultHtml={post?.contentHtml}
+              defaultMarkdown={post?.contentMarkdown ?? ""}
+            />
           </div>
         </div>
 

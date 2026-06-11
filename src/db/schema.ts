@@ -8,6 +8,7 @@ import {
 } from "drizzle-orm/sqlite-core";
 
 export const postStatusValues = ["draft", "published", "archived"] as const;
+export const postContentFormatValues = ["markdown", "rich"] as const;
 export const adPlacementTypeValues = [
   "top_banner",
   "inline_article",
@@ -54,6 +55,12 @@ export const posts = sqliteTable(
     slug: text("slug").notNull().unique(),
     excerpt: text("excerpt").notNull(),
     contentMarkdown: text("content_markdown").notNull(),
+    contentHtml: text("content_html"),
+    contentFormat: text("content_format", {
+      enum: postContentFormatValues,
+    })
+      .notNull()
+      .default("markdown"),
     featuredImage: text("featured_image"),
     coverAltText: text("cover_alt_text"),
     categoryId: text("category_id")

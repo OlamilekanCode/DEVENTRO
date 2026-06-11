@@ -8,6 +8,13 @@
       "when": 1781121743693,
       "tag": "0000_slimy_anthem",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1781191095446,
+      "tag": "0001_overjoyed_blazing_skull",
+      "breakpoints": true
     }
   ]
 }

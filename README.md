@@ -38,6 +38,8 @@ npm run dev
 
 Phase 12 adds a Markdown editor with write and preview modes for post content. The rich editor is intentionally reserved for Phase 13.
 
+Phase 13 adds a TipTap rich editor option for post content. Posts now store `content_format`, Markdown content, and optional rich HTML content.
+
 ## Admin Auth
 
 Phase 9 uses one private admin login controlled by environment variables:

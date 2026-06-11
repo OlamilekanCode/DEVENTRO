@@ -265,6 +265,65 @@
     padding: 0;
   }
 
+  .rich-editor {
+    color: var(--foreground);
+  }
+
+  .rich-editor p {
+    color: var(--foreground);
+  }
+
+  .rich-editor > * + * {
+    margin-top: 0.85rem;
+  }
+
+  .rich-editor h2,
+  .rich-editor h3 {
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  .rich-editor h2 {
+    font-size: 1.35rem;
+  }
+
+  .rich-editor h3 {
+    font-size: 1.15rem;
+  }
+
+  .rich-editor ul,
+  .rich-editor ol {
+    padding-left: 1.25rem;
+  }
+
+  .rich-editor ul {
+    list-style: disc;
+  }
+
+  .rich-editor ol {
+    list-style: decimal;
+  }
+
+  .rich-editor blockquote {
+    border-left: 3px solid var(--primary);
+    color: var(--muted-foreground);
+    padding-left: 1rem;
+  }
+
+  .rich-editor code {
+    border-radius: 0.25rem;
+    background: var(--muted);
+    font-family: var(--font-geist-mono);
+    font-size: 0.875em;
+    padding: 0.15rem 0.3rem;
+  }
+
+  .rich-editor a {
+    color: var(--primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .animate-fade-up,
     .animate-fade-up-delay-1,

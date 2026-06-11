@@ -1,4 +1,5 @@
 export type BlogPostStatus = "draft" | "published" | "archived";
+export type BlogPostContentFormat = "markdown" | "rich";
 
 export type BlogCategory = {
   id: string;
