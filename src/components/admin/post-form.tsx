@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { MarkdownEditor } from "@/components/admin/markdown-editor";
 import { Button } from "@/components/ui/button";
 import type { AdminPostDetail } from "@/lib/admin-posts";
 
@@ -56,18 +57,15 @@ export function PostForm({
                 className="resize-y rounded-md border border-border bg-background px-3 py-3 text-sm leading-6 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10"
               />
             </label>
-            <label className="grid gap-2">
+            <div className="grid gap-2">
               <span className="text-sm font-medium text-foreground">
                 Content
               </span>
-              <textarea
-                required
+              <MarkdownEditor
                 name="contentMarkdown"
                 defaultValue={post?.contentMarkdown ?? ""}
-                rows={12}
-                className="resize-y rounded-md border border-border bg-background px-3 py-3 font-mono text-sm leading-6 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10"
               />
-            </label>
+            </div>
           </div>
         </div>
 

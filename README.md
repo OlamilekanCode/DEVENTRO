@@ -34,6 +34,10 @@ npm run db:migrate:local
 npm run dev
 ```
 
+## Admin Editor
+
+Phase 12 adds a Markdown editor with write and preview modes for post content. The rich editor is intentionally reserved for Phase 13.
+
 ## Admin Auth
 
 Phase 9 uses one private admin login controlled by environment variables:
