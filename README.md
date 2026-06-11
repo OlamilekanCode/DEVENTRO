@@ -40,6 +40,12 @@ Phase 12 adds a Markdown editor with write and preview modes for post content. T
 
 Phase 13 adds a TipTap rich editor option for post content. Posts now store `content_format`, Markdown content, and optional rich HTML content.
 
+## Media Uploads
+
+Phase 14 uploads admin images to the `MEDIA_BUCKET` Cloudflare R2 binding. Local development uses Wrangler's local R2 storage through `npm run dev`.
+
+Create real R2 buckets in Cloudflare before remote deployment and update `wrangler.jsonc` if the bucket names change.
+
 ## Admin Auth
 
 Phase 9 uses one private admin login controlled by environment variables:

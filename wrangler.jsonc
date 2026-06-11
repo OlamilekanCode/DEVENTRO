@@ -11,5 +11,12 @@
       "migrations_dir": "drizzle",
       "migrations_table": "d1_migrations"
     }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "MEDIA_BUCKET",
+      "bucket_name": "deventro-media",
+      "preview_bucket_name": "deventro-media-preview"
+    }
   ]
 }
