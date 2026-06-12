@@ -16,31 +16,14 @@ import {
 } from "lucide-react";
 
 import { AdBanner } from "@/components/ads/ad-banner";
+import { featuredAiTools } from "@/lib/ai-tools-data";
 import { blogCategoriesById, getPublishedBlogPosts } from "@/lib/blog-data";
 
-const featuredTools = [
-  {
-    name: "Cursor",
-    category: "Coding Assistant",
-    description: "AI-first code editor for faster builds and focused iteration.",
-    score: "Review queue",
-    accent: "bg-teal-500",
-  },
-  {
-    name: "Claude",
-    category: "Workflow Assistant",
-    description: "Useful for planning, writing, debugging, and deeper reasoning.",
-    score: "Lab notes",
-    accent: "bg-amber-500",
-  },
-  {
-    name: "Perplexity",
-    category: "Research",
-    description: "Search-backed answers for quick technical discovery.",
-    score: "Comparison ready",
-    accent: "bg-blue-500",
-  },
-];
+const toolStatusLabels = {
+  reviewed: "Reviewed",
+  testing: "Testing",
+  queued: "Queued",
+} as const;
 
 const comparisonDesk = [
   {
@@ -113,7 +96,7 @@ export default function Home() {
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
-                href="/tools"
+                href="/ai-tools"
                 className="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-teal-600 px-5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-teal-700"
               >
                 <Bot className="size-4" aria-hidden="true" />
@@ -155,12 +138,12 @@ export default function Home() {
                 </span>
               </div>
               <div className="mt-5 grid gap-3">
-                {featuredTools.map((tool) => (
+                {featuredAiTools.map((tool) => (
                   <div
                     key={tool.name}
                     className="flex items-center gap-3 rounded-md border border-border bg-background/80 p-3"
                   >
-                    <span className={`size-9 rounded-md ${tool.accent}`} />
+                    <span className={`size-9 rounded-md ${tool.accentClass}`} />
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-semibold text-foreground">
                         {tool.name}
@@ -195,7 +178,7 @@ export default function Home() {
             </p>
           </div>
           <Link
-            href="/tools"
+            href="/ai-tools"
             className="inline-flex items-center gap-2 text-sm font-semibold text-foreground hover:text-teal-700"
           >
             View directory
@@ -203,16 +186,16 @@ export default function Home() {
           </Link>
         </div>
         <div className="grid gap-5 md:grid-cols-3">
-          {featuredTools.map((tool) => (
+          {featuredAiTools.map((tool) => (
             <article
               key={tool.name}
               className="card-lift rounded-md border border-border bg-card p-5 shadow-sm"
             >
               <div className="mb-5 flex items-center justify-between gap-3">
-                <span className={`size-10 rounded-md ${tool.accent}`} />
+                <span className={`size-10 rounded-md ${tool.accentClass}`} />
                 <span className="inline-flex items-center gap-1 rounded-md bg-muted px-2.5 py-1 text-xs font-medium text-muted-foreground">
                   <Star className="size-3.5 text-amber-500" aria-hidden="true" />
-                  {tool.score}
+                  {toolStatusLabels[tool.reviewStatus]}
                 </span>
               </div>
               <p className="text-sm font-medium text-muted-foreground">
