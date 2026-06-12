@@ -12,12 +12,14 @@ import {
 import { AdBanner } from "@/components/ads/ad-banner";
 import { AiToolCard } from "@/components/ai-tools/ai-tool-card";
 import { aiToolCategories, aiTools, featuredAiTools } from "@/lib/ai-tools-data";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "AI Tools Directory | DevEntro",
+export const metadata: Metadata = createPageMetadata({
+  title: "AI Tools Directory",
   description:
     "A practical AI tools directory for developers, freelancers, and tech learners testing better workflows.",
-};
+  path: "/ai-tools",
+});
 
 const reviewSignals = [
   "Real workflow usefulness",

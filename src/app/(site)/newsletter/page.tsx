@@ -3,12 +3,14 @@ import { Mail, ShieldCheck, Sparkles } from "lucide-react";
 
 import { AdBanner } from "@/components/ads/ad-banner";
 import { NewsletterForm } from "@/components/newsletter/newsletter-form";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Newsletter | DevEntro",
+export const metadata: Metadata = createPageMetadata({
+  title: "Newsletter",
   description:
     "Join the DevEntro newsletter for practical AI tool tests, developer workflow notes, and useful review updates.",
-};
+  path: "/newsletter",
+});
 
 const newsletterNotes = [
   "Practical AI tool tests",

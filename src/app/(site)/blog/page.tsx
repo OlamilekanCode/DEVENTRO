@@ -11,12 +11,14 @@ import {
   getBlogTagsForPost,
   getPublishedBlogPosts,
 } from "@/lib/blog-data";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Blog | DevEntro",
+export const metadata: Metadata = createPageMetadata({
+  title: "Blog",
   description:
     "AI tool reviews, developer productivity guides, comparisons, and workflow systems.",
-};
+  path: "/blog",
+});
 
 export default function BlogPage() {
   const posts = getPublishedBlogPosts();

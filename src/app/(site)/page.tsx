@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
 import {
   ArrowRight,
   BookOpen,
@@ -19,6 +20,14 @@ import { AdBanner } from "@/components/ads/ad-banner";
 import { NewsletterForm } from "@/components/newsletter/newsletter-form";
 import { featuredAiTools } from "@/lib/ai-tools-data";
 import { blogCategoriesById, getPublishedBlogPosts } from "@/lib/blog-data";
+import { createPageMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = createPageMetadata({
+  title: "AI Tools, Reviews, and Developer Workflow Systems",
+  description:
+    "DevEntro helps developers, freelancers, and tech learners test AI tools, compare workflows, and build practical systems that ship.",
+  path: "/",
+});
 
 const toolStatusLabels = {
   reviewed: "Reviewed",

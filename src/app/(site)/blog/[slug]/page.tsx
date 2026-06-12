@@ -13,6 +13,7 @@ import {
   getPublishedBlogPosts,
   getRelatedBlogPosts,
 } from "@/lib/blog-data";
+import { siteMetadata } from "@/lib/seo";
 
 type BlogDetailPageProps = {
   params: Promise<{
@@ -34,7 +35,7 @@ export async function generateMetadata({
 
   if (!post) {
     return {
-      title: "Article Not Found | DevEntro",
+      title: "Article Not Found",
     };
   }
 
@@ -47,10 +48,21 @@ export async function generateMetadata({
     openGraph: {
       title: post.seoTitle,
       description: post.seoDescription,
-      images: [post.ogImage],
+      url: post.canonicalUrl,
+      siteName: siteMetadata.name,
+      images: [
+        {
+          url: post.ogImage,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
+      locale: "en_US",
       type: "article",
       publishedTime: post.publishedAt ?? undefined,
       modifiedTime: post.updatedAt,
+      authors: ["DevEntro Team"],
     },
     twitter: {
       card: "summary_large_image",
