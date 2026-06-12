@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 
 import { AdBanner } from "@/components/ads/ad-banner";
+import { NewsletterForm } from "@/components/newsletter/newsletter-form";
 import { featuredAiTools } from "@/lib/ai-tools-data";
 import { blogCategoriesById, getPublishedBlogPosts } from "@/lib/blog-data";
 
@@ -359,30 +360,11 @@ export default function Home() {
               Get the useful AI workflow notes first.
             </h2>
             <p className="mt-4 max-w-xl text-sm leading-6 text-background/70">
-              Newsletter capture will connect to storage later. For now, this
-              section reserves the public homepage experience.
+              Join the early list for practical AI tool tests, workflow notes,
+              and developer-focused review updates.
             </p>
           </div>
-          <form className="rounded-md border border-background/15 bg-background/5 p-4 lg:self-end">
-            <div className="flex flex-col gap-3 sm:flex-row">
-              <input
-                type="email"
-                placeholder="you@example.com"
-                className="h-11 min-w-0 flex-1 rounded-md border border-background/20 bg-background px-4 text-sm text-foreground outline-none placeholder:text-muted-foreground"
-              />
-              <button
-                type="button"
-                className="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-teal-500 px-5 text-sm font-semibold text-white transition-colors hover:bg-teal-600"
-              >
-                <CheckCircle2 className="size-4" aria-hidden="true" />
-                Join list
-              </button>
-            </div>
-            <p className="mt-3 text-xs leading-5 text-background/55">
-              Early notes on tool tests, workflow experiments, and practical AI
-              systems. No automation or email backend yet.
-            </p>
-          </form>
+          <NewsletterForm source="homepage" theme="dark" />
         </div>
       </section>
     </>
