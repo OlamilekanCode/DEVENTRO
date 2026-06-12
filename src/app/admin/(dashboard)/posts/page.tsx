@@ -77,11 +77,12 @@ export default async function AdminPostsPage({
       <section className="mt-6 overflow-hidden rounded-md border border-border bg-card shadow-sm">
         {postItems.length > 0 ? (
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[780px] border-collapse text-left text-sm">
+            <table className="w-full min-w-[920px] border-collapse text-left text-sm">
               <thead className="border-b border-border bg-muted/60 text-xs uppercase tracking-[0.12em] text-muted-foreground">
                 <tr>
                   <th className="px-5 py-3 font-semibold">Title</th>
                   <th className="px-5 py-3 font-semibold">Category</th>
+                  <th className="px-5 py-3 font-semibold">Tags</th>
                   <th className="px-5 py-3 font-semibold">Status</th>
                   <th className="px-5 py-3 font-semibold">Read</th>
                   <th className="px-5 py-3 font-semibold">Updated</th>
@@ -101,6 +102,22 @@ export default async function AdminPostsPage({
                     </td>
                     <td className="px-5 py-4 text-muted-foreground">
                       {post.categoryName ?? "Uncategorized"}
+                    </td>
+                    <td className="px-5 py-4">
+                      {post.tagNames.length > 0 ? (
+                        <div className="flex flex-wrap gap-1.5">
+                          {post.tagNames.map((tagName) => (
+                            <span
+                              key={tagName}
+                              className="rounded-md bg-muted px-2 py-1 text-xs font-medium text-muted-foreground"
+                            >
+                              {tagName}
+                            </span>
+                          ))}
+                        </div>
+                      ) : (
+                        <span className="text-muted-foreground">None</span>
+                      )}
                     </td>
                     <td className="px-5 py-4">
                       <span className="rounded-md bg-muted px-2 py-1 text-xs font-semibold text-muted-foreground">

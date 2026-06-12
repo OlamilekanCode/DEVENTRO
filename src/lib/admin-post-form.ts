@@ -16,6 +16,7 @@ export type PostFormInput = {
   coverAltText: string;
   readingTime: number;
   affiliateDisclosureEnabled: boolean;
+  tagsText: string;
 };
 
 const statusValues = ["draft", "published", "archived"] as const;
@@ -61,6 +62,7 @@ export const parsePostFormData = (formData: FormData): PostFormInput => {
     readingTime: Number.isFinite(readingTime) && readingTime > 0 ? readingTime : 1,
     affiliateDisclosureEnabled:
       String(formData.get("affiliateDisclosureEnabled") ?? "") === "on",
+    tagsText: String(formData.get("tagsText") ?? "").trim(),
   };
 };
 

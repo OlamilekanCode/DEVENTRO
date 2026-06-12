@@ -9,6 +9,7 @@ import { BlogCard } from "@/components/blog/blog-card";
 import {
   blogCategoriesById,
   getBlogPostBySlug,
+  getBlogTagsForPost,
   getPublishedBlogPosts,
   getRelatedBlogPosts,
 } from "@/lib/blog-data";
@@ -69,6 +70,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
   }
 
   const category = blogCategoriesById[post.categoryId];
+  const tags = getBlogTagsForPost(post);
   const relatedPosts = getRelatedBlogPosts(post);
   const publishedDate = post.publishedAt
     ? new Intl.DateTimeFormat("en", {
@@ -108,6 +110,18 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
             <p className="mt-6 text-sm font-medium text-muted-foreground">
               By DevEntro Team / {publishedDate}
             </p>
+            {tags.length > 0 ? (
+              <div className="mt-6 flex flex-wrap gap-2">
+                {tags.map((tag) => (
+                  <span
+                    key={tag.id}
+                    className="rounded-md border border-border bg-background px-2.5 py-1 text-xs font-medium text-muted-foreground"
+                  >
+                    {tag.name}
+                  </span>
+                ))}
+              </div>
+            ) : null}
           </div>
         </header>
 
@@ -168,6 +182,23 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
             <div className="rounded-md border border-dashed border-border bg-card p-5 text-center text-sm font-medium uppercase text-muted-foreground">
               Sidebar advertisement
             </div>
+            {tags.length > 0 ? (
+              <div className="rounded-md border border-border bg-card p-5 shadow-sm">
+                <p className="text-sm font-semibold uppercase text-muted-foreground">
+                  Tags
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {tags.map((tag) => (
+                    <span
+                      key={tag.id}
+                      className="rounded-md bg-muted px-2.5 py-1 text-xs font-medium text-muted-foreground"
+                    >
+                      {tag.name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ) : null}
           </aside>
         </div>
       </article>
@@ -184,6 +215,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                   key={relatedPost.id}
                   post={relatedPost}
                   category={blogCategoriesById[relatedPost.categoryId]}
+                  tags={getBlogTagsForPost(relatedPost)}
                 />
               ))}
             </div>

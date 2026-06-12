@@ -2,15 +2,21 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Clock3 } from "lucide-react";
 
-import type { BlogCategory, BlogPost } from "@/types/blog";
+import type { BlogCategory, BlogPost, BlogTag } from "@/types/blog";
 
 type BlogCardProps = {
   category: BlogCategory | undefined;
   post: BlogPost;
   priority?: boolean;
+  tags?: BlogTag[];
 };
 
-export function BlogCard({ category, post, priority = false }: BlogCardProps) {
+export function BlogCard({
+  category,
+  post,
+  priority = false,
+  tags = [],
+}: BlogCardProps) {
   const publishedDate = post.publishedAt
     ? new Intl.DateTimeFormat("en", {
         month: "short",
@@ -51,6 +57,18 @@ export function BlogCard({ category, post, priority = false }: BlogCardProps) {
         <p className="mt-3 text-sm leading-6 text-muted-foreground">
           {post.excerpt}
         </p>
+        {tags.length > 0 ? (
+          <div className="mt-4 flex flex-wrap gap-1.5">
+            {tags.slice(0, 3).map((tag) => (
+              <span
+                key={tag.id}
+                className="rounded-md border border-border bg-background px-2 py-1 text-xs font-medium text-muted-foreground"
+              >
+                {tag.name}
+              </span>
+            ))}
+          </div>
+        ) : null}
         <div className="mt-5 flex items-center justify-between gap-4 text-sm text-muted-foreground">
           <span>{publishedDate}</span>
           <Link

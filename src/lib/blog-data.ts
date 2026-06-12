@@ -157,6 +157,10 @@ export const blogCategoriesById = Object.fromEntries(
   blogCategories.map((category) => [category.id, category])
 );
 
+export const blogTagsById = Object.fromEntries(
+  blogTags.map((tag) => [tag.id, tag])
+);
+
 export function getPublishedBlogPosts() {
   return blogPosts
     .filter((post) => post.status === "published")
@@ -170,6 +174,12 @@ export function getPublishedBlogPosts() {
 
 export function getBlogPostBySlug(slug: string) {
   return blogPosts.find((post) => post.slug === slug);
+}
+
+export function getBlogTagsForPost(post: BlogPost) {
+  return post.tags
+    .map((tagId) => blogTagsById[tagId])
+    .filter((tag): tag is BlogTag => Boolean(tag));
 }
 
 export function getRelatedBlogPosts(post: BlogPost, limit = 2) {

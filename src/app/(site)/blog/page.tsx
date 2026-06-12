@@ -8,6 +8,7 @@ import { BlogCategoryList } from "@/components/blog/blog-category-list";
 import {
   blogCategories,
   blogCategoriesById,
+  getBlogTagsForPost,
   getPublishedBlogPosts,
 } from "@/lib/blog-data";
 
@@ -61,6 +62,7 @@ export default function BlogPage() {
             <BlogCard
               post={featuredPost}
               category={blogCategoriesById[featuredPost.categoryId]}
+              tags={getBlogTagsForPost(featuredPost)}
               priority
             />
             <div className="rounded-md border border-border bg-card p-6 shadow-sm">
@@ -92,6 +94,7 @@ export default function BlogPage() {
                 key={post.id}
                 post={post}
                 category={blogCategoriesById[post.categoryId]}
+                tags={getBlogTagsForPost(post)}
               />
             ))}
           </div>

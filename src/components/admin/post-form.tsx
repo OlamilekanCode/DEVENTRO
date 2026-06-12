@@ -104,6 +104,20 @@ export function PostForm({
               </label>
               <label className="grid gap-2">
                 <span className="text-sm font-medium text-foreground">
+                  Tags
+                </span>
+                <input
+                  name="tagsText"
+                  defaultValue={post?.tagsText ?? ""}
+                  placeholder="AI Coding, Tool Review"
+                  className="h-11 rounded-md border border-border bg-background px-3 text-sm outline-none focus:border-primary focus:ring-4 focus:ring-primary/10"
+                />
+                <span className="text-xs leading-5 text-muted-foreground">
+                  Separate tags with commas.
+                </span>
+              </label>
+              <label className="grid gap-2">
+                <span className="text-sm font-medium text-foreground">
                   Reading time
                 </span>
                 <input
