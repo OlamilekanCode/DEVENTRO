@@ -10,6 +10,39 @@ npm run dev
 
 Open `http://localhost:3000`.
 
+## Environment Variables
+
+Copy `.env.example` to `.env.local` for local development.
+
+```bash
+copy .env.example .env.local
+```
+
+Required local variables:
+
+```bash
+ADMIN_EMAIL="admin@deventro.site"
+ADMIN_PASSWORD="change-this-password"
+ADMIN_SESSION_SECRET="replace-with-a-long-random-secret"
+```
+
+Generate a strong local session secret with:
+
+```bash
+node -e "console.log(crypto.randomBytes(32).toString('base64'))"
+```
+
+Optional Cloudflare CLI variables for non-interactive deploys:
+
+```bash
+CLOUDFLARE_ACCOUNT_ID="your-cloudflare-account-id"
+CLOUDFLARE_API_TOKEN="your-cloudflare-api-token"
+```
+
+Get `CLOUDFLARE_ACCOUNT_ID` from Cloudflare Dashboard -> Workers & Pages -> Overview, or from the account URL. Create `CLOUDFLARE_API_TOKEN` in Cloudflare Dashboard -> My Profile -> API Tokens. The token needs access to deploy Workers and manage the D1/R2 resources used by this project.
+
+D1 database IDs and R2 bucket names are configured in `wrangler.jsonc`, not `.env.local`.
+
 ## Deployment
 
 DevEntro deploys to Cloudflare with OpenNext.
