@@ -6,7 +6,7 @@ import {
   sanitizeAdminRedirect,
 } from "@/lib/admin-auth";
 
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const isLoginPage = pathname === "/admin/login";
   const session = await getAdminSessionFromCookie(

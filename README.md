@@ -10,6 +10,49 @@ npm run dev
 
 Open `http://localhost:3000`.
 
+## Deployment
+
+DevEntro deploys to Cloudflare with OpenNext.
+
+For production deployments, run the Cloudflare build from WSL or Linux when possible. OpenNext can build on native Windows, but it warns that Windows runtime behavior may be unreliable.
+
+Build the Cloudflare worker output:
+
+```bash
+npm run cf:build
+```
+
+Preview the Cloudflare build locally:
+
+```bash
+npm run cf:preview
+```
+
+Deploy to Cloudflare:
+
+```bash
+npm run cf:deploy
+```
+
+Before the first remote deployment:
+
+1. Create the production D1 database named `deventro`.
+2. Replace the placeholder `database_id` in `wrangler.jsonc`.
+3. Create R2 buckets named `deventro-media` and `deventro-media-preview`, or update `wrangler.jsonc` with the final names.
+4. Set production admin secrets with Wrangler:
+
+```bash
+wrangler secret put ADMIN_EMAIL
+wrangler secret put ADMIN_PASSWORD
+wrangler secret put ADMIN_SESSION_SECRET
+```
+
+5. Apply remote D1 migrations:
+
+```bash
+npm run db:migrate:remote
+```
+
 ## Database
 
 Drizzle migrations are generated into `drizzle/`.

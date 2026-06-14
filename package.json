@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint src drizzle.config.ts next.config.ts",
+    "lint": "eslint src drizzle.config.ts next.config.ts open-next.config.ts",
+    "cf:build": "node --max-old-space-size=8192 ./node_modules/@opennextjs/cloudflare/dist/cli/index.js build",
+    "cf:preview": "npm run cf:build && wrangler dev",
+    "cf:deploy": "npm run cf:build && opennextjs-cloudflare deploy",
     "db:generate": "drizzle-kit generate",
     "db:migrate:local": "wrangler d1 migrations apply deventro --local",
     "db:migrate:remote": "wrangler d1 migrations apply deventro --remote"
