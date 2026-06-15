@@ -1,11 +1,13 @@
 import type { MetadataRoute } from "next";
 
-import { getPublishedBlogPosts } from "@/lib/blog-data";
+import { listPublishedPublicPosts } from "@/lib/public-posts";
 import { siteMetadata } from "@/lib/seo";
 
 const createUrl = (path: string) => new URL(path, siteMetadata.url).toString();
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export const dynamic = "force-dynamic";
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
   const staticRoutes: MetadataRoute.Sitemap = [
     {
@@ -34,7 +36,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  const blogRoutes: MetadataRoute.Sitemap = getPublishedBlogPosts().map((post) => ({
+  const publishedPosts = await listPublishedPublicPosts();
+  const blogRoutes: MetadataRoute.Sitemap = publishedPosts.map((post) => ({
     url: createUrl(`/blog/${post.slug}`),
     lastModified: new Date(post.updatedAt),
     changeFrequency: "monthly",

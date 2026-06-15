@@ -7,12 +7,9 @@ import { ArrowLeft, Clock3, ShieldCheck } from "lucide-react";
 import { AdBanner } from "@/components/ads/ad-banner";
 import { BlogCard } from "@/components/blog/blog-card";
 import {
-  blogCategoriesById,
-  getBlogPostBySlug,
-  getBlogTagsForPost,
-  getPublishedBlogPosts,
-  getRelatedBlogPosts,
-} from "@/lib/blog-data";
+  getPublishedPublicPostBySlug,
+  listRelatedPublishedPublicPosts,
+} from "@/lib/public-posts";
 import { siteMetadata } from "@/lib/seo";
 
 type BlogDetailPageProps = {
@@ -21,17 +18,13 @@ type BlogDetailPageProps = {
   }>;
 };
 
-export function generateStaticParams() {
-  return getPublishedBlogPosts().map((post) => ({
-    slug: post.slug,
-  }));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
 }: BlogDetailPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = getBlogPostBySlug(slug);
+  const post = await getPublishedPublicPostBySlug(slug);
 
   if (!post) {
     return {
@@ -75,15 +68,15 @@ export async function generateMetadata({
 
 export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
   const { slug } = await params;
-  const post = getBlogPostBySlug(slug);
+  const post = await getPublishedPublicPostBySlug(slug);
 
-  if (!post || post.status !== "published") {
+  if (!post) {
     notFound();
   }
 
-  const category = blogCategoriesById[post.categoryId];
-  const tags = getBlogTagsForPost(post);
-  const relatedPosts = getRelatedBlogPosts(post);
+  const category = post.category;
+  const tags = post.tagItems;
+  const relatedPosts = await listRelatedPublishedPublicPosts(post);
   const publishedDate = post.publishedAt
     ? new Intl.DateTimeFormat("en", {
         month: "long",
@@ -163,9 +156,9 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
               <div className="space-y-6 text-base leading-8 text-muted-foreground">
                 <p>{post.contentMarkdown}</p>
                 <p>
-                  This article page is wired to the local typed blog data
-                  structure. The full Markdown renderer and editor workflow will
-                  arrive in later phases.
+                  This article page is loaded from the DevEntro D1 content
+                  database. The full Markdown renderer is handled in the next
+                  correction phase.
                 </p>
                 <p>
                   DevEntro articles will focus on practical tool testing,
@@ -226,8 +219,8 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                 <BlogCard
                   key={relatedPost.id}
                   post={relatedPost}
-                  category={blogCategoriesById[relatedPost.categoryId]}
-                  tags={getBlogTagsForPost(relatedPost)}
+                  category={relatedPost.category}
+                  tags={relatedPost.tagItems}
                 />
               ))}
             </div>

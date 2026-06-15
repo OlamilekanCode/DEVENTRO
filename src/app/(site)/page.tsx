@@ -19,7 +19,7 @@ import {
 import { AdBanner } from "@/components/ads/ad-banner";
 import { NewsletterForm } from "@/components/newsletter/newsletter-form";
 import { featuredAiTools } from "@/lib/ai-tools-data";
-import { blogCategoriesById, getPublishedBlogPosts } from "@/lib/blog-data";
+import { listPublishedPublicPosts } from "@/lib/public-posts";
 import { createPageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = createPageMetadata({
@@ -75,9 +75,11 @@ const signals = [
   "Tech learning systems",
 ];
 
-const latestBlogPosts = getPublishedBlogPosts().slice(0, 3);
+export const dynamic = "force-dynamic";
 
-export default function Home() {
+export default async function Home() {
+  const latestBlogPosts = await listPublishedPublicPosts(3);
+
   return (
     <>
       <section className="relative overflow-hidden border-b border-border">
@@ -233,8 +235,6 @@ export default function Home() {
             </h2>
             <div className="mt-8 grid gap-4">
               {latestBlogPosts.map((article) => {
-                const category = blogCategoriesById[article.categoryId];
-
                 return (
                 <article
                   key={article.id}
@@ -242,7 +242,7 @@ export default function Home() {
                 >
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="rounded-md bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700">
-                      {category?.name ?? "Article"}
+                      {article.category?.name ?? "Article"}
                     </span>
                     <span className="text-xs font-medium text-muted-foreground">
                       {article.readingTime} min read

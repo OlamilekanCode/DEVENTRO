@@ -5,12 +5,8 @@ import { ArrowRight, BookOpen, Search } from "lucide-react";
 import { AdBanner } from "@/components/ads/ad-banner";
 import { BlogCard } from "@/components/blog/blog-card";
 import { BlogCategoryList } from "@/components/blog/blog-category-list";
-import {
-  blogCategories,
-  blogCategoriesById,
-  getBlogTagsForPost,
-  getPublishedBlogPosts,
-} from "@/lib/blog-data";
+import { blogCategories } from "@/lib/blog-data";
+import { listPublishedPublicPosts } from "@/lib/public-posts";
 import { createPageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = createPageMetadata({
@@ -20,8 +16,10 @@ export const metadata: Metadata = createPageMetadata({
   path: "/blog",
 });
 
-export default function BlogPage() {
-  const posts = getPublishedBlogPosts();
+export const dynamic = "force-dynamic";
+
+export default async function BlogPage() {
+  const posts = await listPublishedPublicPosts();
   const featuredPost = posts[0];
   const remainingPosts = posts.slice(1);
 
@@ -63,8 +61,8 @@ export default function BlogPage() {
           <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
             <BlogCard
               post={featuredPost}
-              category={blogCategoriesById[featuredPost.categoryId]}
-              tags={getBlogTagsForPost(featuredPost)}
+              category={featuredPost.category}
+              tags={featuredPost.tagItems}
               priority
             />
             <div className="rounded-md border border-border bg-card p-6 shadow-sm">
@@ -75,8 +73,8 @@ export default function BlogPage() {
                 Start with the newest practical guide.
               </h2>
               <p className="mt-4 text-sm leading-6 text-muted-foreground">
-                This listing currently reads from local typed data. Database-backed
-                publishing comes later in the planned D1 and admin phases.
+                This listing now reads published articles from the DevEntro D1
+                content database.
               </p>
               <Link
                 href={`/blog/${featuredPost.slug}`}
@@ -95,8 +93,8 @@ export default function BlogPage() {
               <BlogCard
                 key={post.id}
                 post={post}
-                category={blogCategoriesById[post.categoryId]}
-                tags={getBlogTagsForPost(post)}
+                category={post.category}
+                tags={post.tagItems}
               />
             ))}
           </div>
