@@ -218,6 +218,11 @@
     color: var(--muted-foreground);
   }
 
+  .markdown-preview strong {
+    color: var(--foreground);
+    font-weight: 700;
+  }
+
   .markdown-preview a {
     color: var(--primary);
     font-weight: 600;
@@ -242,6 +247,38 @@
     border-left: 3px solid var(--primary);
     color: var(--muted-foreground);
     padding-left: 1rem;
+  }
+
+  .markdown-preview img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.375rem;
+    border: 1px solid var(--border);
+  }
+
+  .markdown-preview hr {
+    border: 0;
+    border-top: 1px solid var(--border);
+    margin-block: 1.5rem;
+  }
+
+  .markdown-preview table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow: hidden;
+    font-size: 0.9rem;
+  }
+
+  .markdown-preview th,
+  .markdown-preview td {
+    border: 1px solid var(--border);
+    padding: 0.65rem 0.75rem;
+    text-align: left;
+  }
+
+  .markdown-preview th {
+    color: var(--foreground);
+    font-weight: 700;
   }
 
   .markdown-preview code {
@@ -273,6 +310,10 @@
 
   .rich-editor p {
     color: var(--foreground);
+  }
+
+  .rich-editor strong {
+    font-weight: 700;
   }
 
   .rich-editor > * + * {
@@ -324,6 +365,13 @@
     color: var(--primary);
     text-decoration: underline;
     text-underline-offset: 3px;
+  }
+
+  .rich-editor img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.375rem;
+    border: 1px solid var(--border);
   }
 
   @media (prefers-reduced-motion: reduce) {

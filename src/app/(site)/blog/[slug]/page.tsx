@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, Clock3, ShieldCheck } from "lucide-react";
 
 import { AdBanner } from "@/components/ads/ad-banner";
+import { ArticleContent } from "@/components/blog/article-content";
 import { BlogCard } from "@/components/blog/blog-card";
 import {
   getPublishedPublicPostBySlug,
@@ -153,19 +154,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
             ) : null}
 
             <div className="rounded-md border border-border bg-card p-6 shadow-sm sm:p-8">
-              <div className="space-y-6 text-base leading-8 text-muted-foreground">
-                <p>{post.contentMarkdown}</p>
-                <p>
-                  This article page is loaded from the DevEntro D1 content
-                  database. The full Markdown renderer is handled in the next
-                  correction phase.
-                </p>
-                <p>
-                  DevEntro articles will focus on practical tool testing,
-                  workflow fit, pricing clarity, and honest recommendations for
-                  developers, freelancers, and tech learners.
-                </p>
-              </div>
+              <ArticleContent post={post} />
             </div>
 
             <AdBanner label="Inline article advertisement" variant="inline" />
