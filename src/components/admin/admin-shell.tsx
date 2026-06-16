@@ -5,11 +5,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
+  BarChart3,
   FileText,
   FolderTree,
   Home,
   LayoutDashboard,
   LogOut,
+  Mail,
   Megaphone,
   Settings,
   Sparkles,
@@ -54,6 +56,16 @@ const navItems = [
     label: "AI Tools",
     href: "/admin/tools",
     icon: Sparkles,
+  },
+  {
+    label: "Newsletter",
+    href: "/admin/newsletter",
+    icon: Mail,
+  },
+  {
+    label: "Analytics",
+    href: "/admin/analytics",
+    icon: BarChart3,
   },
   {
     label: "Ads",
