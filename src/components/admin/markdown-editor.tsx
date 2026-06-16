@@ -1,26 +1,21 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef } from "react";
 import {
   Bold,
   Code2,
-  Eye,
   Heading2,
   Italic,
   LinkIcon,
   List,
   ListOrdered,
-  Pencil,
   Quote,
 } from "lucide-react";
-import ReactMarkdown from "react-markdown";
 
 type MarkdownEditorProps = {
-  defaultValue?: string;
-  name: string;
+  onChange: (value: string) => void;
+  value: string;
 };
-
-type EditorMode = "write" | "preview";
 
 type FormatAction = {
   label: string;
@@ -90,10 +85,8 @@ const formatActions: FormatAction[] = [
   },
 ];
 
-export function MarkdownEditor({ defaultValue = "", name }: MarkdownEditorProps) {
+export function MarkdownEditor({ onChange, value }: MarkdownEditorProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const [mode, setMode] = useState<EditorMode>("write");
-  const [value, setValue] = useState(defaultValue);
 
   const wordCount = useMemo(() => {
     return value.trim() ? value.trim().split(/\s+/).length : 0;
@@ -114,7 +107,7 @@ export function MarkdownEditor({ defaultValue = "", name }: MarkdownEditorProps)
     const formattedText = `${prefix}${action.before}${selectedText}${action.after ?? ""}${suffix}`;
     const nextValue = `${value.slice(0, start)}${formattedText}${value.slice(end)}`;
 
-    setValue(nextValue);
+    onChange(nextValue);
 
     window.requestAnimationFrame(() => {
       textarea.focus();
@@ -147,62 +140,20 @@ export function MarkdownEditor({ defaultValue = "", name }: MarkdownEditorProps)
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="hidden text-xs font-medium text-muted-foreground sm:inline">
+          <span className="text-xs font-medium text-muted-foreground">
             {wordCount} words
           </span>
-          <div className="inline-flex rounded-md border border-border bg-background p-1">
-            <button
-              type="button"
-              onClick={() => setMode("write")}
-              className={`inline-flex h-8 items-center gap-1.5 rounded px-2.5 text-xs font-semibold ${
-                mode === "write"
-                  ? "bg-foreground text-background"
-                  : "text-muted-foreground"
-              }`}
-            >
-              <Pencil className="size-3.5" aria-hidden="true" />
-              Write
-            </button>
-            <button
-              type="button"
-              onClick={() => setMode("preview")}
-              className={`inline-flex h-8 items-center gap-1.5 rounded px-2.5 text-xs font-semibold ${
-                mode === "preview"
-                  ? "bg-foreground text-background"
-                  : "text-muted-foreground"
-              }`}
-            >
-              <Eye className="size-3.5" aria-hidden="true" />
-              Preview
-            </button>
-          </div>
         </div>
       </div>
 
-      {mode === "write" ? (
-        <textarea
-          ref={textareaRef}
-          required
-          name={name}
-          value={value}
-          onChange={(event) => setValue(event.target.value)}
-          rows={16}
-          className="min-h-[420px] w-full resize-y border-0 bg-background px-4 py-4 font-mono text-sm leading-7 text-foreground outline-none"
-        />
-      ) : (
-        <>
-          <input type="hidden" name={name} value={value} />
-          <div className="min-h-[420px] px-5 py-5">
-            {value.trim() ? (
-              <div className="markdown-preview">
-                <ReactMarkdown>{value}</ReactMarkdown>
-              </div>
-            ) : (
-              <p className="text-sm text-muted-foreground">Nothing to preview.</p>
-            )}
-          </div>
-        </>
-      )}
+      <textarea
+        ref={textareaRef}
+        required
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        rows={16}
+        className="min-h-[420px] w-full resize-y border-0 bg-background px-4 py-4 font-mono text-sm leading-7 text-foreground outline-none"
+      />
     </div>
   );
 }
