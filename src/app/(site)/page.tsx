@@ -108,7 +108,7 @@ export default async function Home() {
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
-                href="/ai-tools"
+                href="/tools"
                 className="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-teal-600 px-5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-teal-700"
               >
                 <Bot className="size-4" aria-hidden="true" />
@@ -190,7 +190,7 @@ export default async function Home() {
             </p>
           </div>
           <Link
-            href="/ai-tools"
+            href="/tools"
             className="inline-flex items-center gap-2 text-sm font-semibold text-foreground hover:text-teal-700"
           >
             View directory

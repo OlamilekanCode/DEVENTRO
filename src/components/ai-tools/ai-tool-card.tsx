@@ -1,5 +1,11 @@
 import Link from "next/link";
-import { ArrowUpRight, CheckCircle2, FlaskConical, ListChecks } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  CheckCircle2,
+  FlaskConical,
+  ListChecks,
+} from "lucide-react";
 
 import type { AiTool } from "@/types/ai-tool";
 
@@ -67,15 +73,24 @@ export function AiToolCard({ tool }: AiToolCardProps) {
           <CheckCircle2 className="size-4 text-teal-600" aria-hidden="true" />
           {tool.pricingSummary}
         </span>
-        <Link
-          href={tool.websiteUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-foreground px-4 text-sm font-semibold text-background transition-colors hover:bg-foreground/85"
-        >
-          Visit tool
-          <ArrowUpRight className="size-4" aria-hidden="true" />
-        </Link>
+        <div className="flex flex-wrap gap-2">
+          <Link
+            href={`/tools/${tool.slug}`}
+            className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-foreground px-4 text-sm font-semibold text-background transition-colors hover:bg-foreground/85"
+          >
+            Details
+            <ArrowRight className="size-4" aria-hidden="true" />
+          </Link>
+          <Link
+            href={tool.websiteUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-border bg-background px-4 text-sm font-semibold text-foreground transition-colors hover:bg-muted"
+          >
+            Visit
+            <ArrowUpRight className="size-4" aria-hidden="true" />
+          </Link>
+        </div>
       </div>
     </article>
   );
