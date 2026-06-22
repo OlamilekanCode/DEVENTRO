@@ -1,9 +1,14 @@
 import type { MetadataRoute } from "next";
 
-import { listPublishedPublicPosts } from "@/lib/public-posts";
-import { siteMetadata } from "@/lib/seo";
+import { getDb } from "@/db/cloudflare";
+import { listPublishedAiTools } from "@/lib/ai-tools-db";
+import {
+  listPublicCategories,
+  listPublishedPublicPosts,
+} from "@/lib/public-posts";
+import { createAbsoluteUrl } from "@/lib/seo";
 
-const createUrl = (path: string) => new URL(path, siteMetadata.url).toString();
+const createUrl = createAbsoluteUrl;
 
 export const dynamic = "force-dynamic";
 
@@ -78,13 +83,30 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  const publishedPosts = await listPublishedPublicPosts();
+  const db = await getDb();
+  const [publishedPosts, categories, tools] = await Promise.all([
+    listPublishedPublicPosts(),
+    listPublicCategories(),
+    listPublishedAiTools(db),
+  ]);
   const blogRoutes: MetadataRoute.Sitemap = publishedPosts.map((post) => ({
     url: createUrl(`/blog/${post.slug}`),
     lastModified: new Date(post.updatedAt),
     changeFrequency: "monthly",
     priority: 0.8,
   }));
+  const categoryRoutes: MetadataRoute.Sitemap = categories.map((category) => ({
+    url: createUrl(`/categories/${category.slug}`),
+    lastModified: now,
+    changeFrequency: "weekly",
+    priority: 0.65,
+  }));
+  const toolRoutes: MetadataRoute.Sitemap = tools.map((tool) => ({
+    url: createUrl(`/tools/${tool.slug}`),
+    lastModified: tool.updatedAt ? new Date(tool.updatedAt) : now,
+    changeFrequency: "monthly",
+    priority: 0.75,
+  }));
 
-  return [...staticRoutes, ...blogRoutes];
+  return [...staticRoutes, ...blogRoutes, ...categoryRoutes, ...toolRoutes];
 }

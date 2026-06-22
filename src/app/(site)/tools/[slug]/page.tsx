@@ -14,7 +14,7 @@ import { AdBanner } from "@/components/ads/ad-banner";
 import { SidebarAd } from "@/components/ads/sidebar-ad";
 import { getDb } from "@/db/cloudflare";
 import { getPublishedAiToolBySlug } from "@/lib/ai-tools-db";
-import { createPageMetadata } from "@/lib/seo";
+import { createAbsoluteUrl, createPageMetadata, siteMetadata } from "@/lib/seo";
 
 type ToolDetailPageProps = {
   params: Promise<{
@@ -58,9 +58,54 @@ export default async function ToolDetailPage({ params }: ToolDetailPageProps) {
   if (!tool) {
     notFound();
   }
+  const toolUrl = createAbsoluteUrl(`/tools/${tool.slug}`);
+  const schemaPrice = tool.startingPrice.replace(/[^0-9.]/g, "") || "0";
+  const reviewSchema = {
+    "@context": "https://schema.org",
+    "@type": "Review",
+    name: `${tool.name} Review`,
+    url: toolUrl,
+    reviewBody: tool.fullDescription,
+    author: {
+      "@type": "Organization",
+      name: "DevEntro Team",
+      url: siteMetadata.url,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: siteMetadata.name,
+      url: siteMetadata.url,
+    },
+    itemReviewed: {
+      "@type": "SoftwareApplication",
+      name: tool.name,
+      applicationCategory: tool.category,
+      url: tool.websiteUrl,
+      offers: {
+        "@type": "Offer",
+        price: schemaPrice,
+        priceCurrency: "USD",
+        url: tool.affiliateUrl || tool.websiteUrl,
+      },
+    },
+    ...(tool.overallScore > 0
+      ? {
+          reviewRating: {
+            "@type": "Rating",
+            ratingValue: tool.overallScore,
+            bestRating: 10,
+            worstRating: 1,
+          },
+        }
+      : {}),
+  };
 
   return (
     <main>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewSchema) }}
+      />
       <section className="border-b border-border bg-card">
         <div className="mx-auto grid w-full max-w-6xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[1fr_320px] lg:px-8">
           <div>

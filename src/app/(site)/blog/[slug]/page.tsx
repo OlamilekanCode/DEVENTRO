@@ -13,7 +13,7 @@ import {
   getPublishedPublicPostBySlug,
   listRelatedPublishedPublicPosts,
 } from "@/lib/public-posts";
-import { siteMetadata } from "@/lib/seo";
+import { createAbsoluteUrl, siteMetadata } from "@/lib/seo";
 
 type BlogDetailPageProps = {
   params: Promise<{
@@ -39,16 +39,16 @@ export async function generateMetadata({
     title: post.seoTitle,
     description: post.seoDescription,
     alternates: {
-      canonical: post.canonicalUrl,
+      canonical: createAbsoluteUrl(post.canonicalUrl),
     },
     openGraph: {
       title: post.seoTitle,
       description: post.seoDescription,
-      url: post.canonicalUrl,
+      url: createAbsoluteUrl(post.canonicalUrl),
       siteName: siteMetadata.name,
       images: [
         {
-          url: post.ogImage,
+          url: createAbsoluteUrl(post.ogImage),
           width: 1200,
           height: 630,
           alt: post.title,
@@ -64,7 +64,7 @@ export async function generateMetadata({
       card: "summary_large_image",
       title: post.seoTitle,
       description: post.seoDescription,
-      images: [post.ogImage],
+      images: [createAbsoluteUrl(post.ogImage)],
     },
   };
 }
@@ -87,9 +87,33 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
         year: "numeric",
       }).format(new Date(post.publishedAt))
     : "Draft";
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.excerpt,
+    image: createAbsoluteUrl(post.ogImage),
+    datePublished: post.publishedAt ?? post.createdAt,
+    dateModified: post.updatedAt,
+    author: {
+      "@type": "Organization",
+      name: "DevEntro Team",
+      url: siteMetadata.url,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: siteMetadata.name,
+      url: siteMetadata.url,
+    },
+    mainEntityOfPage: createAbsoluteUrl(post.canonicalUrl),
+  };
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
       <article>
         <header className="border-b border-border bg-card">
           <div className="mx-auto w-full max-w-4xl px-4 py-12 sm:px-6 lg:px-8">

@@ -20,26 +20,32 @@ export const siteMetadata = {
   image: defaultImage,
 };
 
+export const createAbsoluteUrl = (path: string) =>
+  new URL(path, siteMetadata.url).toString();
+
 export function createPageMetadata({
   title,
   description,
   path,
   image = defaultImage,
 }: PageMetadataInput): Metadata {
+  const canonicalUrl = createAbsoluteUrl(path);
+  const imageUrl = image.startsWith("http") ? image : createAbsoluteUrl(image);
+
   return {
     title,
     description,
     alternates: {
-      canonical: path,
+      canonical: canonicalUrl,
     },
     openGraph: {
       title,
       description,
-      url: path,
+      url: canonicalUrl,
       siteName: defaultTitle,
       images: [
         {
-          url: image,
+          url: imageUrl,
           width: 1200,
           height: 630,
           alt: title,
@@ -52,7 +58,7 @@ export function createPageMetadata({
       card: "summary_large_image",
       title,
       description,
-      images: [image],
+      images: [imageUrl],
     },
   };
 }
