@@ -38,6 +38,7 @@ export const subscribeToNewsletter = async (
     id: crypto.randomUUID(),
     email: normalizedEmail,
     source: source.trim().slice(0, 80) || "homepage",
+    status: "subscribed",
     isConfirmed: false,
     createdAt: new Date().toISOString(),
   });

@@ -1,0 +1,1 @@
+ALTER TABLE `newsletter_subscribers` ADD `status` text DEFAULT 'subscribed' NOT NULL;

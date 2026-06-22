@@ -1,5 +1,5 @@
 import { desc } from "drizzle-orm";
-import { Mail } from "lucide-react";
+import { Download, Mail, Users } from "lucide-react";
 
 import { getDb } from "@/db/cloudflare";
 import { newsletterSubscribers } from "@/db/schema";
@@ -14,6 +14,12 @@ export const metadata = {
 
 export const dynamic = "force-dynamic";
 
+const escapeCsvValue = (value: string | boolean) => {
+  const text = String(value);
+
+  return `"${text.replaceAll('"', '""')}"`;
+};
+
 export default async function AdminNewsletterPage() {
   const db = await getDb();
   const subscribers = await db
@@ -21,11 +27,34 @@ export default async function AdminNewsletterPage() {
       id: newsletterSubscribers.id,
       email: newsletterSubscribers.email,
       source: newsletterSubscribers.source,
+      status: newsletterSubscribers.status,
       isConfirmed: newsletterSubscribers.isConfirmed,
       createdAt: newsletterSubscribers.createdAt,
     })
     .from(newsletterSubscribers)
     .orderBy(desc(newsletterSubscribers.createdAt));
+  const subscribedCount = subscribers.filter(
+    (subscriber) => subscriber.status === "subscribed",
+  ).length;
+  const unconfirmedCount = subscribers.filter(
+    (subscriber) => !subscriber.isConfirmed,
+  ).length;
+  const csvRows = [
+    ["email", "source", "status", "isConfirmed", "createdAt"]
+      .map(escapeCsvValue)
+      .join(","),
+    ...subscribers.map((subscriber) =>
+      [
+        subscriber.email,
+        subscriber.source,
+        subscriber.status,
+        subscriber.isConfirmed,
+        subscriber.createdAt,
+      ]
+        .map(escapeCsvValue)
+        .join(","),
+    ),
+  ].join("\n");
 
   return (
     <div className="mx-auto w-full max-w-6xl">
@@ -49,6 +78,38 @@ export default async function AdminNewsletterPage() {
         </div>
       </section>
 
+      <section className="mt-6 grid gap-4 md:grid-cols-3">
+        <article className="rounded-md border border-border bg-card p-5 shadow-sm">
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">
+                Total subscribers
+              </p>
+              <p className="mt-2 text-3xl font-semibold tracking-tight text-foreground">
+                {subscribers.length}
+              </p>
+            </div>
+            <Users className="size-5 text-primary" aria-hidden="true" />
+          </div>
+        </article>
+        <article className="rounded-md border border-border bg-card p-5 shadow-sm">
+          <p className="text-sm font-medium text-muted-foreground">
+            Active status
+          </p>
+          <p className="mt-2 text-3xl font-semibold tracking-tight text-foreground">
+            {subscribedCount}
+          </p>
+        </article>
+        <article className="rounded-md border border-border bg-card p-5 shadow-sm">
+          <p className="text-sm font-medium text-muted-foreground">
+            Unconfirmed
+          </p>
+          <p className="mt-2 text-3xl font-semibold tracking-tight text-foreground">
+            {unconfirmedCount}
+          </p>
+        </article>
+      </section>
+
       <section className="mt-6 overflow-hidden rounded-md border border-border bg-card shadow-sm">
         <div className="border-b border-border px-5 py-4">
           <p className="text-sm font-semibold text-foreground">
@@ -62,6 +123,7 @@ export default async function AdminNewsletterPage() {
                 <th className="px-5 py-3 font-semibold">Email</th>
                 <th className="px-5 py-3 font-semibold">Source</th>
                 <th className="px-5 py-3 font-semibold">Status</th>
+                <th className="px-5 py-3 font-semibold">Confirmed</th>
                 <th className="px-5 py-3 font-semibold">Created</th>
               </tr>
             </thead>
@@ -76,7 +138,10 @@ export default async function AdminNewsletterPage() {
                       {subscriber.source}
                     </td>
                     <td className="px-5 py-4 text-muted-foreground">
-                      {subscriber.isConfirmed ? "Confirmed" : "Unconfirmed"}
+                      {subscriber.status}
+                    </td>
+                    <td className="px-5 py-4 text-muted-foreground">
+                      {subscriber.isConfirmed ? "Yes" : "No"}
                     </td>
                     <td className="px-5 py-4 text-muted-foreground">
                       {subscriber.createdAt}
@@ -86,7 +151,7 @@ export default async function AdminNewsletterPage() {
               ) : (
                 <tr>
                   <td
-                    colSpan={4}
+                    colSpan={5}
                     className="px-5 py-8 text-center text-muted-foreground"
                   >
                     No subscribers captured yet.
@@ -96,6 +161,27 @@ export default async function AdminNewsletterPage() {
             </tbody>
           </table>
         </div>
+      </section>
+
+      <section className="mt-6 rounded-md border border-border bg-card p-5 shadow-sm">
+        <div className="flex items-center gap-3">
+          <Download className="size-5 text-primary" aria-hidden="true" />
+          <div>
+            <p className="text-sm font-semibold text-foreground">
+              Export-ready CSV
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Copy this when a simple manual export is needed. No email sending
+              automation is connected yet.
+            </p>
+          </div>
+        </div>
+        <textarea
+          readOnly
+          value={csvRows}
+          rows={Math.min(Math.max(subscribers.length + 1, 4), 10)}
+          className="mt-4 w-full resize-y rounded-md border border-border bg-background px-3 py-3 font-mono text-xs leading-5 text-muted-foreground outline-none"
+        />
       </section>
     </div>
   );

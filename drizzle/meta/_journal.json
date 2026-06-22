@@ -22,6 +22,13 @@
       "when": 1781635253757,
       "tag": "0002_elite_felicia_hardy",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1782162217590,
+      "tag": "0003_jazzy_the_leader",
+      "breakpoints": true
     }
   ]
 }

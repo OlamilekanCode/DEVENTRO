@@ -15,6 +15,11 @@ export const aiToolPricingTypeValues = [
   "paid",
   "enterprise",
 ] as const;
+export const newsletterStatusValues = [
+  "subscribed",
+  "unsubscribed",
+  "bounced",
+] as const;
 export const adPlacementTypeValues = [
   "top_banner",
   "inline_article",
@@ -176,6 +181,9 @@ export const newsletterSubscribers = sqliteTable(
     id: text("id").primaryKey(),
     email: text("email").notNull().unique(),
     source: text("source").notNull().default("homepage"),
+    status: text("status", { enum: newsletterStatusValues })
+      .notNull()
+      .default("subscribed"),
     isConfirmed: integer("is_confirmed", { mode: "boolean" }).notNull().default(false),
     createdAt: text("created_at")
       .notNull()
