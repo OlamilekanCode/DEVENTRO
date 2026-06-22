@@ -192,6 +192,23 @@ export const newsletterSubscribers = sqliteTable(
   (table) => [index("newsletter_email_idx").on(table.email)],
 );
 
+export const mediaAssets = sqliteTable(
+  "media_assets",
+  {
+    id: text("id").primaryKey(),
+    url: text("url").notNull(),
+    key: text("key").notNull().unique(),
+    filename: text("filename").notNull(),
+    altText: text("alt_text"),
+    size: integer("size").notNull(),
+    type: text("type").notNull(),
+    createdAt: text("created_at")
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+  },
+  (table) => [index("media_assets_key_idx").on(table.key)],
+);
+
 export const categoriesRelations = relations(categories, ({ many }) => ({
   posts: many(posts),
 }));

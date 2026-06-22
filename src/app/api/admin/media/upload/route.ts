@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 
+import { getDb } from "@/db/cloudflare";
 import { getAdminSessionFromRequest } from "@/lib/admin-auth";
-import { uploadImageToR2 } from "@/lib/media-storage";
+import { saveMediaAsset, uploadImageToR2 } from "@/lib/media-storage";
 
 const errorMessages: Record<string, string> = {
   type: "Only JPG, PNG, WebP, and GIF images are allowed.",
@@ -17,6 +18,7 @@ export async function POST(request: Request) {
 
   const formData = await request.formData();
   const image = formData.get("image");
+  const altText = String(formData.get("altText") ?? "").trim();
 
   if (!(image instanceof File)) {
     return NextResponse.json({ error: "Image is required." }, { status: 400 });
@@ -24,6 +26,13 @@ export async function POST(request: Request) {
 
   try {
     const media = await uploadImageToR2(image);
+    const db = await getDb();
+
+    await saveMediaAsset(db, {
+      ...media,
+      altText,
+      filename: image.name,
+    });
 
     return NextResponse.json({ media });
   } catch (error) {

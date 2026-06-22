@@ -69,6 +69,17 @@ export function MediaUploadForm() {
           />
         </label>
 
+        <label className="grid gap-2">
+          <span className="text-sm font-medium text-foreground">
+            Alt text
+          </span>
+          <input
+            name="altText"
+            placeholder="Short image description"
+            className="h-11 rounded-md border border-border bg-background px-3 text-sm outline-none focus:border-primary focus:ring-4 focus:ring-primary/10"
+          />
+        </label>
+
         <button
           type="submit"
           disabled={isUploading}

@@ -1,4 +1,8 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { desc } from "drizzle-orm";
+
+import type { DbClient } from "@/db/client";
+import { mediaAssets } from "@/db/schema";
 
 const allowedImageTypes = new Set([
   "image/jpeg",
@@ -14,6 +18,11 @@ export type StoredMedia = {
   url: string;
   contentType: string;
   size: number;
+};
+
+export type MediaAssetInput = StoredMedia & {
+  altText: string;
+  filename: string;
 };
 
 const extensionByMimeType: Record<string, string> = {
@@ -104,4 +113,39 @@ export const sanitizeMediaKey = (parts: string[]): string | null => {
   }
 
   return key;
+};
+
+export const saveMediaAsset = async (
+  db: DbClient,
+  input: MediaAssetInput,
+) => {
+  await db
+    .insert(mediaAssets)
+    .values({
+      id: crypto.randomUUID(),
+      url: input.url,
+      key: input.key,
+      filename: input.filename,
+      altText: input.altText || null,
+      size: input.size,
+      type: input.contentType,
+      createdAt: new Date().toISOString(),
+    })
+    .onConflictDoNothing();
+};
+
+export const listMediaAssets = async (db: DbClient) => {
+  return db
+    .select({
+      id: mediaAssets.id,
+      url: mediaAssets.url,
+      key: mediaAssets.key,
+      filename: mediaAssets.filename,
+      altText: mediaAssets.altText,
+      size: mediaAssets.size,
+      type: mediaAssets.type,
+      createdAt: mediaAssets.createdAt,
+    })
+    .from(mediaAssets)
+    .orderBy(desc(mediaAssets.createdAt));
 };
