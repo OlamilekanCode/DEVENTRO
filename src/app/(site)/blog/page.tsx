@@ -5,8 +5,10 @@ import { ArrowRight, BookOpen, Search } from "lucide-react";
 import { AdBanner } from "@/components/ads/ad-banner";
 import { BlogCard } from "@/components/blog/blog-card";
 import { BlogCategoryList } from "@/components/blog/blog-category-list";
-import { blogCategories } from "@/lib/blog-data";
-import { listPublishedPublicPosts } from "@/lib/public-posts";
+import {
+  listPublicCategories,
+  listPublishedPublicPosts,
+} from "@/lib/public-posts";
 import { createPageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = createPageMetadata({
@@ -20,6 +22,7 @@ export const dynamic = "force-dynamic";
 
 export default async function BlogPage() {
   const posts = await listPublishedPublicPosts();
+  const categories = await listPublicCategories();
   const featuredPost = posts[0];
   const remainingPosts = posts.slice(1);
 
@@ -48,7 +51,12 @@ export default async function BlogPage() {
               </p>
             </div>
             <div className="mt-5">
-              <BlogCategoryList categories={blogCategories} />
+              <BlogCategoryList
+                categories={categories.map((category) => ({
+                  ...category,
+                  description: category.description ?? "",
+                }))}
+              />
             </div>
           </aside>
         </div>

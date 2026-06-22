@@ -3,8 +3,10 @@ import Link from "next/link";
 import { ArrowRight, FolderOpen } from "lucide-react";
 
 import { BlogCategoryList } from "@/components/blog/blog-category-list";
-import { blogCategories } from "@/lib/blog-data";
-import { listPublishedPublicPosts } from "@/lib/public-posts";
+import {
+  listPublicCategories,
+  listPublishedPublicPosts,
+} from "@/lib/public-posts";
 import { createPageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = createPageMetadata({
@@ -18,6 +20,7 @@ export const dynamic = "force-dynamic";
 
 export default async function CategoriesPage() {
   const posts = await listPublishedPublicPosts();
+  const categories = await listPublicCategories();
 
   return (
     <main>
@@ -44,11 +47,16 @@ export default async function CategoriesPage() {
             Quick Browse
           </p>
           <div className="mt-5">
-            <BlogCategoryList categories={blogCategories} />
+            <BlogCategoryList
+              categories={categories.map((category) => ({
+                ...category,
+                description: category.description ?? "",
+              }))}
+            />
           </div>
         </aside>
         <div className="grid gap-4">
-          {blogCategories.map((category) => {
+          {categories.map((category) => {
             const count = posts.filter(
               (post) => post.category?.slug === category.slug,
             ).length;

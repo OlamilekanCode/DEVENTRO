@@ -58,6 +58,7 @@ export const listAdminCategories = async (db: DbClient) => {
       id: categories.id,
       name: categories.name,
       slug: categories.slug,
+      description: categories.description,
     })
     .from(categories)
     .orderBy(categories.name);

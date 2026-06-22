@@ -4,8 +4,10 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, FolderOpen } from "lucide-react";
 
 import { BlogCard } from "@/components/blog/blog-card";
-import { blogCategories } from "@/lib/blog-data";
-import { listPublishedPublicPosts } from "@/lib/public-posts";
+import {
+  getPublicCategoryBySlug,
+  listPublishedPublicPosts,
+} from "@/lib/public-posts";
 import { createPageMetadata } from "@/lib/seo";
 
 type CategoryPageProps = {
@@ -20,7 +22,7 @@ export async function generateMetadata({
   params,
 }: CategoryPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const category = blogCategories.find((item) => item.slug === slug);
+  const category = await getPublicCategoryBySlug(slug);
 
   if (!category) {
     return createPageMetadata({
@@ -39,7 +41,7 @@ export async function generateMetadata({
 
 export default async function CategoryDetailPage({ params }: CategoryPageProps) {
   const { slug } = await params;
-  const category = blogCategories.find((item) => item.slug === slug);
+  const category = await getPublicCategoryBySlug(slug);
 
   if (!category) {
     notFound();

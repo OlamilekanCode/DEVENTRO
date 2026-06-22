@@ -3,6 +3,7 @@ import { and, desc, eq, inArray } from "drizzle-orm";
 import type { DbClient } from "@/db/client";
 import { getDb } from "@/db/cloudflare";
 import { categories, posts, postTags, tags } from "@/db/schema";
+import { ensureDefaultCategories } from "@/lib/admin-posts";
 import type { BlogCategory, BlogPost, BlogTag } from "@/types/blog";
 
 export type PublicBlogPost = BlogPost & {
@@ -168,6 +169,46 @@ export const listPublishedPublicPosts = async (limit?: number) => {
   const rows = typeof limit === "number" ? await query.limit(limit) : await query;
 
   return mapPublicPosts(db, rows);
+};
+
+export const listPublicCategories = async () => {
+  const db = await getDb();
+
+  await ensureDefaultCategories(db);
+
+  return db
+    .select({
+      id: categories.id,
+      name: categories.name,
+      slug: categories.slug,
+      description: categories.description,
+    })
+    .from(categories)
+    .orderBy(categories.name);
+};
+
+export const getPublicCategoryBySlug = async (slug: string) => {
+  const db = await getDb();
+
+  await ensureDefaultCategories(db);
+
+  const [category] = await db
+    .select({
+      id: categories.id,
+      name: categories.name,
+      slug: categories.slug,
+      description: categories.description,
+    })
+    .from(categories)
+    .where(eq(categories.slug, slug))
+    .limit(1);
+
+  return category
+    ? {
+        ...category,
+        description: category.description ?? "",
+      }
+    : null;
 };
 
 export const getPublishedPublicPostBySlug = async (slug: string) => {
