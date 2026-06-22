@@ -4,7 +4,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Clock3, ShieldCheck } from "lucide-react";
 
-import { AdBanner } from "@/components/ads/ad-banner";
 import { InlineAd } from "@/components/ads/inline-ad";
 import { SidebarAd } from "@/components/ads/sidebar-ad";
 import { ArticleContent } from "@/components/blog/article-content";
