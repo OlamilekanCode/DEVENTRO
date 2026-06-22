@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 
 import { AdBanner } from "@/components/ads/ad-banner";
+import { SidebarAd } from "@/components/ads/sidebar-ad";
 import { AiToolCard } from "@/components/ai-tools/ai-tool-card";
 import { getDb } from "@/db/cloudflare";
 import { listPublishedAiTools } from "@/lib/ai-tools-db";
@@ -197,9 +198,7 @@ export default async function ToolsPage() {
               remain practical, transparent, and useful first.
             </p>
           </div>
-          <div className="rounded-md border border-dashed border-border bg-card p-5 text-center text-sm font-medium uppercase text-muted-foreground">
-            Sidebar advertisement
-          </div>
+          <SidebarAd />
         </aside>
       </section>
 

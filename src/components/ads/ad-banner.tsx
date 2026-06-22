@@ -16,6 +16,7 @@ export function AdBanner({ label, variant = "top" }: AdBannerProps) {
           variant === "inline" ? "my-10 min-h-20" : "",
           variant === "footer" ? "mb-8 mt-10 min-h-16" : "",
         ].join(" ")}
+        style={{ contentVisibility: "auto", containIntrinsicSize: "80px" }}
       >
         Advertisement
       </div>

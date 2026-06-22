@@ -1,8 +1,7 @@
-import { desc } from "drizzle-orm";
 import { Megaphone } from "lucide-react";
 
 import { getDb } from "@/db/cloudflare";
-import { adPlacements } from "@/db/schema";
+import { listAdminAdPlacements } from "@/lib/ad-placements";
 
 export const metadata = {
   title: "Ads | DevEntro Admin",
@@ -24,18 +23,7 @@ const placementLabels = {
 
 export default async function AdminAdsPage() {
   const db = await getDb();
-  const placements = await db
-    .select({
-      id: adPlacements.id,
-      name: adPlacements.name,
-      placementType: adPlacements.placementType,
-      isEnabled: adPlacements.isEnabled,
-      sponsorImage: adPlacements.sponsorImage,
-      sponsorUrl: adPlacements.sponsorUrl,
-      updatedAt: adPlacements.updatedAt,
-    })
-    .from(adPlacements)
-    .orderBy(desc(adPlacements.updatedAt));
+  const placements = await listAdminAdPlacements(db);
 
   return (
     <div className="mx-auto w-full max-w-6xl">

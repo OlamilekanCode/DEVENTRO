@@ -5,6 +5,8 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, Clock3, ShieldCheck } from "lucide-react";
 
 import { AdBanner } from "@/components/ads/ad-banner";
+import { InlineAd } from "@/components/ads/inline-ad";
+import { SidebarAd } from "@/components/ads/sidebar-ad";
 import { ArticleContent } from "@/components/blog/article-content";
 import { BlogCard } from "@/components/blog/blog-card";
 import {
@@ -157,7 +159,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
               <ArticleContent post={post} />
             </div>
 
-            <AdBanner label="Inline article advertisement" variant="inline" />
+            <InlineAd label="Inline article advertisement" />
           </div>
 
           <aside className="space-y-5">
@@ -173,9 +175,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                 and useful before any monetization gets layered in.
               </p>
             </div>
-            <div className="rounded-md border border-dashed border-border bg-card p-5 text-center text-sm font-medium uppercase text-muted-foreground">
-              Sidebar advertisement
-            </div>
+            <SidebarAd />
             {tags.length > 0 ? (
               <div className="rounded-md border border-border bg-card p-5 shadow-sm">
                 <p className="text-sm font-semibold uppercase text-muted-foreground">

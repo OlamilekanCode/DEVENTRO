@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight, BookOpen, Search } from "lucide-react";
 
 import { AdBanner } from "@/components/ads/ad-banner";
+import { InlineAd } from "@/components/ads/inline-ad";
 import { BlogCard } from "@/components/blog/blog-card";
 import { BlogCategoryList } from "@/components/blog/blog-category-list";
 import {
@@ -108,6 +109,8 @@ export default async function BlogPage() {
           </div>
         ) : null}
       </section>
+
+      <InlineAd label="Inline blog listing advertisement" />
     </>
   );
 }

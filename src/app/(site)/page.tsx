@@ -17,6 +17,8 @@ import {
 } from "lucide-react";
 
 import { AdBanner } from "@/components/ads/ad-banner";
+import { InlineAd } from "@/components/ads/inline-ad";
+import { SidebarAd } from "@/components/ads/sidebar-ad";
 import { NewsletterForm } from "@/components/newsletter/newsletter-form";
 import { getDb } from "@/db/cloudflare";
 import { listPublishedAiTools } from "@/lib/ai-tools-db";
@@ -291,14 +293,14 @@ export default async function Home() {
                 </div>
               ))}
             </div>
-            <div className="mt-8 rounded-md border border-dashed border-border bg-muted/70 p-5 text-center text-sm font-medium text-muted-foreground">
-              Sidebar advertisement
+            <div className="mt-8">
+              <SidebarAd />
             </div>
           </aside>
         </div>
       </section>
 
-      <AdBanner label="Inline homepage advertisement" variant="inline" />
+      <InlineAd label="Inline homepage advertisement" />
 
       <section className="mx-auto grid w-full max-w-6xl gap-8 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:px-8">
         <div>

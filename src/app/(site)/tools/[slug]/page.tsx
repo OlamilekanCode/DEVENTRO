@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 
 import { AdBanner } from "@/components/ads/ad-banner";
+import { SidebarAd } from "@/components/ads/sidebar-ad";
 import { getDb } from "@/db/cloudflare";
 import { getPublishedAiToolBySlug } from "@/lib/ai-tools-db";
 import { createPageMetadata } from "@/lib/seo";
@@ -216,9 +217,7 @@ export default async function ToolDetailPage({ params }: ToolDetailPageProps) {
               ))}
             </div>
           </div>
-          <div className="rounded-md border border-dashed border-border bg-card p-5 text-center text-sm font-medium uppercase text-muted-foreground">
-            Sidebar advertisement
-          </div>
+          <SidebarAd />
         </aside>
       </section>
     </main>
