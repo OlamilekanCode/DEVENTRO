@@ -35,6 +35,9 @@ yarn-error.log*
 .next-start-*.log
 
 # env files (can opt-in for committing if needed)
+.env
+.env.local
+.dev.vars
 .env*
 !.env.example
 
@@ -42,6 +45,7 @@ yarn-error.log*
 .vercel
 
 # cloudflare
+.wrangler
 .wrangler/
 .open-next/
 
