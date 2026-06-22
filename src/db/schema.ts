@@ -9,6 +9,12 @@ import {
 
 export const postStatusValues = ["draft", "published", "archived"] as const;
 export const postContentFormatValues = ["markdown", "rich"] as const;
+export const aiToolPricingTypeValues = [
+  "free",
+  "freemium",
+  "paid",
+  "enterprise",
+] as const;
 export const adPlacementTypeValues = [
   "top_banner",
   "inline_article",
@@ -109,13 +115,32 @@ export const aiTools = sqliteTable(
     id: text("id").primaryKey(),
     name: text("name").notNull(),
     slug: text("slug").notNull().unique(),
+    logo: text("logo"),
     tagline: text("tagline").notNull(),
     description: text("description").notNull(),
+    shortDescription: text("short_description"),
+    fullDescription: text("full_description"),
     websiteUrl: text("website_url").notNull(),
     category: text("category").notNull(),
+    pricingType: text("pricing_type", {
+      enum: aiToolPricingTypeValues,
+    })
+      .notNull()
+      .default("freemium"),
+    startingPrice: text("starting_price"),
     pricingSummary: text("pricing_summary"),
     affiliateUrl: text("affiliate_url"),
     logoUrl: text("logo_url"),
+    bestFor: text("best_for"),
+    pros: text("pros"),
+    cons: text("cons"),
+    easeOfUseScore: integer("ease_of_use_score").notNull().default(0),
+    pricingValueScore: integer("pricing_value_score").notNull().default(0),
+    featuresScore: integer("features_score").notNull().default(0),
+    developerUsefulnessScore: integer("developer_usefulness_score")
+      .notNull()
+      .default(0),
+    overallScore: integer("overall_score").notNull().default(0),
     isFeatured: integer("is_featured", { mode: "boolean" }).notNull().default(false),
     status: text("status", { enum: postStatusValues }).notNull().default("draft"),
     ...timestamps,

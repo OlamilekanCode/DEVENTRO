@@ -11,7 +11,8 @@ import {
 
 import { AdBanner } from "@/components/ads/ad-banner";
 import { AiToolCard } from "@/components/ai-tools/ai-tool-card";
-import { aiToolCategories, aiTools, featuredAiTools } from "@/lib/ai-tools-data";
+import { getDb } from "@/db/cloudflare";
+import { listPublishedAiTools } from "@/lib/ai-tools-db";
 import { createPageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = createPageMetadata({
@@ -28,7 +29,16 @@ const reviewSignals = [
   "Affiliate-ready disclosure",
 ];
 
-export default function ToolsPage() {
+export const dynamic = "force-dynamic";
+
+export default async function ToolsPage() {
+  const db = await getDb();
+  const aiTools = await listPublishedAiTools(db);
+  const featuredAiTools = aiTools.filter((tool) => tool.isFeatured);
+  const aiToolCategories = Array.from(
+    new Set(aiTools.map((tool) => tool.category)),
+  ).sort();
+
   return (
     <main>
       <section className="border-b border-border bg-card">

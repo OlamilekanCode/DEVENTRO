@@ -11,7 +11,8 @@ import {
 } from "lucide-react";
 
 import { AdBanner } from "@/components/ads/ad-banner";
-import { aiTools } from "@/lib/ai-tools-data";
+import { getDb } from "@/db/cloudflare";
+import { getPublishedAiToolBySlug } from "@/lib/ai-tools-db";
 import { createPageMetadata } from "@/lib/seo";
 
 type ToolDetailPageProps = {
@@ -21,22 +22,17 @@ type ToolDetailPageProps = {
 };
 
 const statusLabels = {
-  reviewed: "Reviewed",
-  testing: "Testing",
-  queued: "Queued",
+  draft: "Draft",
+  published: "Published",
+  archived: "Archived",
 } as const;
-
-const scoreRows = [
-  ["Ease of use", "Pending hands-on score"],
-  ["Pricing value", "Pending hands-on score"],
-  ["Developer usefulness", "Pending hands-on score"],
-];
 
 export async function generateMetadata({
   params,
 }: ToolDetailPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const tool = aiTools.find((item) => item.slug === slug);
+  const db = await getDb();
+  const tool = await getPublishedAiToolBySlug(db, slug);
 
   if (!tool) {
     return createPageMetadata({
@@ -55,7 +51,8 @@ export async function generateMetadata({
 
 export default async function ToolDetailPage({ params }: ToolDetailPageProps) {
   const { slug } = await params;
-  const tool = aiTools.find((item) => item.slug === slug);
+  const db = await getDb();
+  const tool = await getPublishedAiToolBySlug(db, slug);
 
   if (!tool) {
     notFound();
@@ -89,7 +86,7 @@ export default async function ToolDetailPage({ params }: ToolDetailPageProps) {
               </div>
             </div>
             <p className="mt-6 max-w-2xl text-base leading-8 text-muted-foreground">
-              {tool.description}
+              {tool.fullDescription}
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
@@ -118,11 +115,12 @@ export default async function ToolDetailPage({ params }: ToolDetailPageProps) {
               </p>
             </div>
             <p className="mt-4 text-2xl font-bold text-foreground">
-              {statusLabels[tool.reviewStatus]}
+              {statusLabels[tool.status]}
             </p>
             <p className="mt-3 text-sm leading-6 text-muted-foreground">
-              Full scored review data will be expanded when the database-backed
-              tools system arrives.
+              {tool.overallScore > 0
+                ? `Overall score: ${tool.overallScore}/10.`
+                : "Full scored review data is pending."}
             </p>
           </aside>
         </div>
@@ -138,9 +136,44 @@ export default async function ToolDetailPage({ params }: ToolDetailPageProps) {
               Workflow fit
             </h2>
             <p className="mt-3 text-sm leading-7 text-muted-foreground">
-              {tool.workflowFit}
+              {tool.fullDescription}
             </p>
           </article>
+
+          <div className="grid gap-6 md:grid-cols-2">
+            <article className="rounded-md border border-border bg-card p-6 shadow-sm">
+              <h2 className="text-2xl font-bold text-foreground">Pros</h2>
+              <div className="mt-4 grid gap-3">
+                {tool.pros.length > 0 ? (
+                  tool.pros.map((item) => (
+                    <p key={item} className="text-sm leading-6 text-muted-foreground">
+                      {item}
+                    </p>
+                  ))
+                ) : (
+                  <p className="text-sm text-muted-foreground">
+                    Pros will be added after testing.
+                  </p>
+                )}
+              </div>
+            </article>
+            <article className="rounded-md border border-border bg-card p-6 shadow-sm">
+              <h2 className="text-2xl font-bold text-foreground">Cons</h2>
+              <div className="mt-4 grid gap-3">
+                {tool.cons.length > 0 ? (
+                  tool.cons.map((item) => (
+                    <p key={item} className="text-sm leading-6 text-muted-foreground">
+                      {item}
+                    </p>
+                  ))
+                ) : (
+                  <p className="text-sm text-muted-foreground">
+                    Cons will be added after testing.
+                  </p>
+                )}
+              </div>
+            </article>
+          </div>
 
           <article className="rounded-md border border-border bg-card p-6 shadow-sm">
             <CheckCircle2 className="size-6 text-teal-600" aria-hidden="true" />
@@ -167,10 +200,18 @@ export default async function ToolDetailPage({ params }: ToolDetailPageProps) {
               Review Scores
             </h2>
             <div className="mt-4 grid gap-3">
-              {scoreRows.map(([label, value]) => (
+              {[
+                ["Ease of use", tool.easeOfUseScore],
+                ["Pricing value", tool.pricingValueScore],
+                ["Features", tool.featuresScore],
+                ["Developer usefulness", tool.developerUsefulnessScore],
+                ["Overall", tool.overallScore],
+              ].map(([label, value]) => (
                 <div key={label} className="border-t border-border pt-3">
                   <p className="text-sm font-semibold text-foreground">{label}</p>
-                  <p className="mt-1 text-xs text-muted-foreground">{value}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {Number(value) > 0 ? `${value}/10` : "Pending"}
+                  </p>
                 </div>
               ))}
             </div>

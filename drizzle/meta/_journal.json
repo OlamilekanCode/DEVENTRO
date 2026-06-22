@@ -15,6 +15,13 @@
       "when": 1781191095446,
       "tag": "0001_overjoyed_blazing_skull",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1781635253757,
+      "tag": "0002_elite_felicia_hardy",
+      "breakpoints": true
     }
   ]
 }

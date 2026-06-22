@@ -1,17 +1,33 @@
-export type AiToolStatus = "reviewed" | "testing" | "queued";
+export type AiToolStatus = "draft" | "published" | "archived";
+export type AiToolPricingType = "free" | "freemium" | "paid" | "enterprise";
 
 export type AiTool = {
   id: string;
   name: string;
   slug: string;
+  logo: string;
+  logoUrl: string;
   category: string;
   tagline: string;
   description: string;
+  shortDescription: string;
+  fullDescription: string;
   websiteUrl: string;
+  affiliateUrl: string;
+  pricingType: AiToolPricingType;
+  startingPrice: string;
   pricingSummary: string;
   bestFor: string[];
-  workflowFit: string;
-  reviewStatus: AiToolStatus;
+  pros: string[];
+  cons: string[];
+  easeOfUseScore: number;
+  pricingValueScore: number;
+  featuresScore: number;
+  developerUsefulnessScore: number;
+  overallScore: number;
+  status: AiToolStatus;
   accentClass: string;
   isFeatured: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 };

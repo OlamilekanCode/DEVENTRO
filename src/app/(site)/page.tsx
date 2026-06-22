@@ -18,7 +18,8 @@ import {
 
 import { AdBanner } from "@/components/ads/ad-banner";
 import { NewsletterForm } from "@/components/newsletter/newsletter-form";
-import { featuredAiTools } from "@/lib/ai-tools-data";
+import { getDb } from "@/db/cloudflare";
+import { listPublishedAiTools } from "@/lib/ai-tools-db";
 import { listPublishedPublicPosts } from "@/lib/public-posts";
 import { createPageMetadata } from "@/lib/seo";
 
@@ -30,9 +31,9 @@ export const metadata: Metadata = createPageMetadata({
 });
 
 const toolStatusLabels = {
-  reviewed: "Reviewed",
-  testing: "Testing",
-  queued: "Queued",
+  draft: "Draft",
+  published: "Published",
+  archived: "Archived",
 } as const;
 
 const comparisonDesk = [
@@ -78,7 +79,14 @@ const signals = [
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const latestBlogPosts = await listPublishedPublicPosts(3);
+  const db = await getDb();
+  const [latestBlogPosts, publishedAiTools] = await Promise.all([
+    listPublishedPublicPosts(3),
+    listPublishedAiTools(db),
+  ]);
+  const featuredAiTools = publishedAiTools
+    .filter((tool) => tool.isFeatured)
+    .slice(0, 3);
 
   return (
     <>
@@ -207,7 +215,9 @@ export default async function Home() {
                 <span className={`size-10 rounded-md ${tool.accentClass}`} />
                 <span className="inline-flex items-center gap-1 rounded-md bg-muted px-2.5 py-1 text-xs font-medium text-muted-foreground">
                   <Star className="size-3.5 text-amber-500" aria-hidden="true" />
-                  {toolStatusLabels[tool.reviewStatus]}
+                  {tool.overallScore > 0
+                    ? `${tool.overallScore}/10`
+                    : toolStatusLabels[tool.status]}
                 </span>
               </div>
               <p className="text-sm font-medium text-muted-foreground">
@@ -217,7 +227,7 @@ export default async function Home() {
                 {tool.name}
               </h3>
               <p className="mt-3 text-sm leading-6 text-muted-foreground">
-                {tool.description}
+                {tool.shortDescription}
               </p>
             </article>
           ))}

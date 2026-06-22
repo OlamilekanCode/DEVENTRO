@@ -14,9 +14,9 @@ type AiToolCardProps = {
 };
 
 const statusLabels = {
-  reviewed: "Reviewed",
-  testing: "Testing",
-  queued: "Queued",
+  draft: "Draft",
+  published: "Published",
+  archived: "Archived",
 } as const;
 
 export function AiToolCard({ tool }: AiToolCardProps) {
@@ -39,21 +39,25 @@ export function AiToolCard({ tool }: AiToolCardProps) {
         </div>
         <span className="inline-flex shrink-0 items-center gap-1 rounded-md bg-muted px-2.5 py-1 text-xs font-semibold text-muted-foreground">
           <FlaskConical className="size-3.5" aria-hidden="true" />
-          {statusLabels[tool.reviewStatus]}
+          {tool.overallScore > 0
+            ? `${tool.overallScore}/10`
+            : statusLabels[tool.status]}
         </span>
       </div>
 
       <h2 className="mt-5 text-xl font-bold leading-snug text-foreground">
-        {tool.tagline}
+        {tool.shortDescription}
       </h2>
       <p className="mt-3 text-sm leading-6 text-muted-foreground">
-        {tool.description}
+        {tool.fullDescription}
       </p>
 
       <div className="mt-5 flex items-start gap-2 border-l-2 border-teal-500 pl-3">
         <ListChecks className="mt-0.5 size-4 shrink-0 text-teal-600" aria-hidden="true" />
         <p className="text-sm leading-6 text-muted-foreground">
-          {tool.workflowFit}
+          {tool.bestFor.length > 0
+            ? `Best for ${tool.bestFor.join(", ")}.`
+            : "Workflow fit notes are being tested."}
         </p>
       </div>
 
