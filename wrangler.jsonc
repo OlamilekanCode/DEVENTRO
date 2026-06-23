@@ -18,7 +18,7 @@
     {
       "binding": "DB",
       "database_name": "deventro",
-      "database_id": "00000000-0000-0000-0000-000000000000",
+      "database_id": "d3d249cd-c73b-4145-bf99-30d8139e9daf",
       "migrations_dir": "drizzle",
       "migrations_table": "d1_migrations"
     }
