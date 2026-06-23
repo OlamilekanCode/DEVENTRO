@@ -1,8 +1,8 @@
 # DevEntro
 
-DevEntro is a polished MVP blog platform for AI tool reviews, developer workflow guides, comparison content, newsletter capture, and a future monetized AI tools directory.
+DevEntro is a completed MVP content platform for AI tool reviews, developer workflow articles, comparison pages, newsletter capture, and an admin-managed AI tools directory.
 
-The project was built in controlled phases to keep the MVP scalable without adding bloated features too early.
+The MVP is intentionally focused: it includes the publishing, media, taxonomy, newsletter, ads-placeholder, SEO, and Cloudflare deployment foundation needed to run the site without adding public accounts, comments, payments, automation, or live ad-network scripts.
 
 ## Tech Stack
 
@@ -16,51 +16,75 @@ The project was built in controlled phases to keep the MVP scalable without addi
 - Cloudflare R2
 - OpenNext for Cloudflare
 - Wrangler
-- TipTap rich editor
-- React Markdown
-
-## Current Features
-
-- Modern public homepage
-- Public blog listing page
-- Public blog detail page
-- Static typed blog data seed
-- D1-backed admin post CRUD
+- TipTap rich text editor
 - Markdown editor with preview
-- Rich text editor option
-- Admin authentication with one private admin account
-- Admin dashboard shell
-- Category and tag foundation
-- R2 image upload flow
-- Public AI tools directory
-- Newsletter capture into D1
-- Reusable ad placeholder components
-- SEO metadata
-- Sitemap and robots.txt
-- Cloudflare deployment setup
+- React Markdown rendering
+
+## Completed MVP Features
+
+- Public homepage for DevEntro positioning and latest content discovery
+- D1-backed public blog listing and blog detail pages
+- D1-backed category listing and category detail pages
+- Markdown and rich text article editors in admin
+- Admin post CRUD with draft, published, and archived states
+- Post SEO fields, canonical paths, Open Graph image fields, reading time, affiliate disclosure toggle, tags, and categories
+- Admin authentication using a private admin email/password and signed HTTP-only session cookie
+- Admin dashboard with D1 metrics for posts, tools, taxonomy, newsletter, and ad placements
+- Category and tag management
+- R2-backed media upload flow with a media library page
+- Public AI tools directory and individual tool detail pages
+- Admin AI tools CRUD for directory entries
+- Newsletter capture stored in D1
+- Newsletter admin page for captured subscribers
+- Ads admin page for enabling/disabling placements and saving optional sponsor URL/image placeholders
+- Reusable public ad placeholder components
+- Static comparison, about, contact, privacy, terms, and affiliate disclosure pages
+- SEO metadata helpers, page-level metadata, sitemap, and robots.txt
+- Cloudflare deployment scripts through OpenNext and Wrangler
 
 ## Public Routes
 
-- `/`
-- `/blog`
-- `/blog/[slug]`
-- `/ai-tools`
-- `/newsletter`
-- `/robots.txt`
-- `/sitemap.xml`
+- `/` - homepage
+- `/blog` - published D1 blog listing
+- `/blog/[slug]` - published D1 blog detail
+- `/categories` - category index
+- `/categories/[slug]` - posts filtered by category
+- `/tools` - public AI tools directory
+- `/tools/[slug]` - public AI tool detail
+- `/ai-tools` - AI tools landing/compatibility route
+- `/comparisons` - comparison content page
+- `/newsletter` - newsletter signup page
+- `/about` - about page
+- `/contact` - contact page
+- `/privacy-policy` - privacy policy
+- `/affiliate-disclosure` - affiliate disclosure
+- `/terms` - terms page
+- `/robots.txt` - robots rules
+- `/sitemap.xml` - generated sitemap
 
 ## Admin Routes
 
-- `/admin/login`
-- `/admin`
-- `/admin/posts`
-- `/admin/posts/new`
-- `/admin/posts/[slug]/edit`
-- `/admin/media`
-- `/admin/categories`
-- `/admin/tags`
+- `/admin/login` - private admin login
+- `/admin` - dashboard metrics and recent activity
+- `/admin/posts` - post list and edit entry point
+- `/admin/posts/new` - create post with Markdown/rich editor
+- `/admin/posts/[slug]/edit` - edit, publish, archive, or delete post
+- `/admin/media` - upload and review R2 media assets
+- `/admin/categories` - category list
+- `/admin/categories/new` - create category
+- `/admin/categories/[slug]/edit` - edit or delete category
+- `/admin/tags` - tag list
+- `/admin/tags/new` - create tag
+- `/admin/tags/[slug]/edit` - edit or delete tag
+- `/admin/tools` - AI tools admin list
+- `/admin/tools/new` - create AI tool
+- `/admin/tools/[slug]/edit` - edit, feature, publish, archive, or delete AI tool
+- `/admin/newsletter` - newsletter subscriber list
+- `/admin/analytics` - placeholder analytics surface
+- `/admin/ads` - ad placement enablement and sponsor placeholder fields
+- `/admin/settings` - placeholder settings surface
 
-Admin routes are protected by a signed HTTP-only session cookie.
+Admin routes are protected by middleware and require a valid signed session cookie.
 
 ## API Routes
 
@@ -68,7 +92,14 @@ Admin routes are protected by a signed HTTP-only session cookie.
 - `POST /api/admin/logout`
 - `POST /api/admin/posts`
 - `POST /api/admin/posts/[slug]`
+- `POST /api/admin/categories`
+- `POST /api/admin/categories/[slug]`
+- `POST /api/admin/tags`
+- `POST /api/admin/tags/[slug]`
+- `POST /api/admin/tools`
+- `POST /api/admin/tools/[slug]`
 - `POST /api/admin/media/upload`
+- `POST /api/admin/ads`
 - `GET /api/media/[...key]`
 - `POST /api/newsletter`
 
@@ -123,41 +154,20 @@ CLOUDFLARE_API_TOKEN="your-cloudflare-api-token"
 
 D1 database IDs and R2 bucket names are configured in `wrangler.jsonc`, not `.env.local`.
 
-## How To Get Env Values
+## Environment Safety
 
-`ADMIN_EMAIL`
+The repository ignores local secrets and generated output, including:
 
-Use the email address you want to log in with at `/admin/login`.
+- `.env`
+- `.env.local`
+- `.env*`
+- `.dev.vars`
+- `.wrangler`
+- `.open-next`
+- `node_modules`
+- `.next`
 
-`ADMIN_PASSWORD`
-
-Create a strong password yourself. Store it in a password manager.
-
-`ADMIN_SESSION_SECRET`
-
-Generate a strong local secret:
-
-```bash
-node -e "console.log(crypto.randomBytes(32).toString('base64'))"
-```
-
-`CLOUDFLARE_ACCOUNT_ID`
-
-Get it from Cloudflare Dashboard -> Workers & Pages -> Overview, or from the Cloudflare account URL.
-
-`CLOUDFLARE_API_TOKEN`
-
-Create it from Cloudflare Dashboard -> My Profile -> API Tokens.
-
-Recommended permissions:
-
-- Workers Scripts: Edit
-- Workers Routes: Edit, if routes are used
-- D1: Edit
-- R2: Edit
-- Account Settings: Read
-
-Keep this token private. Do not commit it.
+`.env.example` remains intentionally trackable as a safe template.
 
 ## Database
 
@@ -185,12 +195,16 @@ Apply remote migrations:
 npm run db:migrate:remote
 ```
 
-The production D1 database is configured in `wrangler.jsonc`:
+The app uses D1 for:
 
-```json
-"database_name": "deventro",
-"database_id": "replace-with-real-cloudflare-d1-id"
-```
+- posts
+- post tags
+- categories
+- tags
+- AI tools
+- newsletter subscribers
+- ad placements
+- media asset records
 
 ## Media Uploads
 
@@ -200,8 +214,6 @@ Configured buckets:
 
 - `deventro-media`
 - `deventro-media-preview`
-
-If you use different bucket names, update `wrangler.jsonc`.
 
 Supported upload types:
 
@@ -216,26 +228,25 @@ Maximum upload size:
 5 MB
 ```
 
-## Ads Architecture
+## Ads
 
-The MVP includes reusable placeholder ad components and layout space for future monetization.
+The MVP includes reusable ad placeholder components and admin-managed placement records.
 
-Current planned placements:
+Current placements:
 
-- top banner ads
-- inline article ads
-- sidebar ads
-- footer ads
+- top banner
+- inline article
+- sidebar
+- mobile sticky
+- footer
 
-Future ad networks can be integrated without redesigning the public layout:
+The admin ads page can:
 
-- Google AdSense
-- Mediavine
-- Ezoic
-- custom sponsor banners
-- affiliate banners
+- enable or disable each placement
+- save an optional sponsor URL
+- save an optional sponsor image path or URL
 
-Ad density should stay conservative. SEO and performance remain higher priority than ad volume.
+Real Google AdSense scripts and other ad-network scripts are intentionally not included in this MVP.
 
 ## SEO
 
@@ -247,8 +258,8 @@ Implemented:
 - Open Graph metadata
 - Twitter card metadata
 - article metadata
-- `sitemap.xml`
-- `robots.txt`
+- generated `sitemap.xml`
+- generated `robots.txt`
 
 Robots blocks:
 
@@ -259,31 +270,13 @@ Robots blocks:
 
 DevEntro deploys to Cloudflare with OpenNext.
 
-For production deployments, use WSL or Linux when possible. OpenNext can build on native Windows, but it warns that Windows runtime behavior may be unreliable.
-
-Build Cloudflare output:
-
-```bash
-npm run cf:build
-```
-
-Preview Cloudflare output locally:
-
-```bash
-npm run cf:preview
-```
-
-Deploy:
-
-```bash
-npm run cf:deploy
-```
+For production deployments, use WSL or Linux when possible. OpenNext can build on native Windows, but it may warn that Windows runtime behavior differs from the target runtime.
 
 Before first production deployment:
 
 1. Create a Cloudflare D1 database named `deventro`.
-2. Replace the placeholder `database_id` in `wrangler.jsonc`.
-3. Create R2 buckets named `deventro-media` and `deventro-media-preview`.
+2. Replace any placeholder D1 database ID in `wrangler.jsonc`.
+3. Create R2 buckets named `deventro-media` and `deventro-media-preview`, or update `wrangler.jsonc` with your bucket names.
 4. Set production admin secrets:
 
 ```bash
@@ -298,7 +291,7 @@ wrangler secret put ADMIN_SESSION_SECRET
 npm run db:migrate:remote
 ```
 
-6. Deploy:
+6. Build and deploy:
 
 ```bash
 npm run cf:deploy
@@ -322,68 +315,36 @@ npm run db:migrate:remote
 ## Project Structure
 
 ```text
-src/app/(site)              Public pages
+src/app/(site)              Public routes
 src/app/admin               Admin routes
 src/app/api                 API routes
-src/components              Reusable components
+src/components              Reusable public and admin components
 src/db                      Drizzle schema and D1 client
-src/lib                     Data helpers, SEO helpers, auth, storage
+src/lib                     Data helpers, auth, SEO, forms, storage
 src/types                   Shared TypeScript types
 drizzle                     D1 migrations
-public                      DevEntro visual assets
+public                      DevEntro image assets
 ```
 
-## Final Implementation Summary
+## Intentionally Not Included
 
-Completed phases:
-
-1. Project setup
-2. Tailwind and Shadcn setup
-3. Basic layout
-4. Homepage
-5. Blog data structure
-6. Blog listing page
-7. Blog detail page
-8. Database setup with Cloudflare D1 and Drizzle
-9. Admin authentication
-10. Admin dashboard shell
-11. Post CRUD
-12. Markdown editor
-13. Rich editor
-14. Image upload with Cloudflare R2
-15. Categories and tags
-16. AI tools directory
-17. Newsletter capture
-18. SEO metadata
-19. Sitemap and robots.txt
-20. Deployment setup
-
-Post-phase cleanup completed:
-
-- documented required env variables
-- added dummy local env values
-- documented how to get keys
-- removed unused Next starter assets
-- removed generated local build/cache/log files
-
-## Current Limitations
-
-These are intentionally not included in the MVP:
+These are out of scope for the MVP:
 
 - public user accounts
 - comments
-- paid features
-- Pinterest automation
-- full AI tools admin CRUD
-- email provider integration
-- advanced ad management UI
-- production analytics
+- payments or paid memberships
+- Pinterest API automation
+- real Google AdSense scripts
+- other live ad-network scripts
+- email provider delivery automation
+- production analytics integration
 
-## Recommended Next Steps
+## Deploy Readiness Checklist
 
-1. Create real Cloudflare D1 and R2 resources.
-2. Replace the placeholder D1 database ID in `wrangler.jsonc`.
-3. Set Wrangler production secrets.
-4. Run remote D1 migrations.
-5. Deploy to Cloudflare from WSL or Linux.
-6. Add real review content and polish public article rendering.
+- Dependencies install with `npm install`
+- Code quality passes with `npm run lint`
+- Production build passes with `npm run build`
+- Remote Cloudflare resources exist
+- `wrangler.jsonc` contains real D1/R2 resource identifiers
+- Production admin secrets are set with Wrangler
+- Remote D1 migrations have been applied

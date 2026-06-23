@@ -26,8 +26,8 @@ export default async function NewPostPage() {
           Create a database-backed article.
         </h1>
         <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">
-          Keep the draft simple for now. A dedicated Markdown editor comes in
-          Phase 12.
+          Write with the Markdown editor or rich text editor, then publish
+          directly to the D1-backed public blog.
         </p>
       </div>
       <PostForm

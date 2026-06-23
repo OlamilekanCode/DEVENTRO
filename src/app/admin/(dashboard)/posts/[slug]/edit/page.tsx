@@ -43,7 +43,7 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
             {post.title}
           </h1>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">
-            Update post details. Markdown editor controls arrive next phase.
+            Update content, metadata, editor format, and D1 publishing status.
           </p>
         </div>
         <form action={`/api/admin/posts/${post.slug}`} method="post">

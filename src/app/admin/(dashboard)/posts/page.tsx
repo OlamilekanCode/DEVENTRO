@@ -158,9 +158,8 @@ export default async function AdminPostsPage({
                 No D1 posts yet.
               </h2>
               <p className="mt-2 max-w-md text-sm leading-6 text-muted-foreground">
-                Create the first database-backed post. Public blog pages still
-                use the seeded static content until the public data switch is
-                reviewed.
+                Create the first database-backed post. Published posts appear
+                on the public blog through the D1 publishing flow.
               </p>
               <Link
                 href="/admin/posts/new"
