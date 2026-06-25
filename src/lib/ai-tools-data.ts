@@ -183,6 +183,37 @@ export const aiTools: AiTool[] = [
     accentClass: "bg-rose-500",
     isFeatured: false,
   },
+  {
+    id: "remio",
+    name: "Remio",
+    slug: "remio",
+    logo: "",
+    logoUrl: "",
+    category: "Knowledge Workspace",
+    tagline: "Local-first AI memory and personal knowledge base.",
+    description:
+      "Useful for retrieving focused personal context from files, webpages, recordings, emails, messages, images, and notes without repeatedly scanning folders or loading whole documents into prompts.",
+    shortDescription:
+      "Local-first AI memory and knowledge base for personal context.",
+    fullDescription:
+      "Remio parses personal files, webpages, recordings, emails, messages, images, and notes into local indexes and vectors so knowledge workers and builders can retrieve the right context quickly.",
+    websiteUrl: "https://remio.ai/",
+    affiliateUrl: "",
+    pricingType: "freemium",
+    startingPrice: "$0",
+    pricingSummary: "Free tier with paid plans",
+    bestFor: ["Personal knowledge base", "AI memory", "Document context"],
+    pros: ["Local-first workflow", "Multi-format parsing", "Focused context retrieval"],
+    cons: ["Requires the desktop app", "Best for users with accumulated personal context"],
+    easeOfUseScore: 8,
+    pricingValueScore: 8,
+    featuresScore: 8,
+    developerUsefulnessScore: 7,
+    overallScore: 8,
+    status: "published",
+    accentClass: "bg-cyan-500",
+    isFeatured: false,
+  },
 ];
 
 export const featuredAiTools = aiTools.filter((tool) => tool.isFeatured);
